@@ -15,8 +15,8 @@ public class Payment {
     @Id
     private Long id;
 
-    /* Definição de relação 1-1 com a tabela Order e lado não dominante de relacionamento bidirecional, sendo
-    controlado/referenciado pelo payment da tabela Order que gerencia a FK */
+    /* Definição de relação 1-1 com a tabela Order e lado não dominante (inverse side) de relacionamento bidirecional,
+    sendo controlado/referenciado pelo payment da tabela Order que gerencia a FK */
     @OneToOne(mappedBy = "payment")
     private Order order;
 
