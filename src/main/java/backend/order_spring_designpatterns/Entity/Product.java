@@ -5,10 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 
+import java.math.BigDecimal;
 
-// Definição da entidade Client (Cliente)
+// Definição da entidade Product (Produto)
 @Entity
-public class Client {
+public class Product {
     @Id
     private Long id;
 
@@ -17,7 +18,9 @@ public class Client {
     @Column(nullable = false)
     private String name;
 
-    @NotBlank
     @Column(nullable = false)
-    private String email;
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private BigDecimal stock;
 }
