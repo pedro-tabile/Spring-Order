@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 
-
 // Definição da entidade Client (Cliente)
 @Entity
 public class Client {

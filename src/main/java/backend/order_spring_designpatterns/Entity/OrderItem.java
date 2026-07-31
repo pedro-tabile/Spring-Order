@@ -1,22 +1,19 @@
 package backend.order_spring_designpatterns.Entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.List;
 
 // Definição da entidade Order (Pedido)
 @Entity
 public class OrderItem {
-    @Id
-    private Long id;
+    /* Indica que o campo é composto por uma chave primária composta a partir do tipo especificado */
+    @EmbeddedId
+    private OrderItemId id;
 
     // Definição de relação n-1 com a tabela Product - unidirecional
     @ManyToOne
