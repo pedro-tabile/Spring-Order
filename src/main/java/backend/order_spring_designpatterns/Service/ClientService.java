@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 /* Classe que define regras de negócio para Client */
 @Service
-public class ClientService {
-    // Autowired faz a injeção de dependência automática no campo, delegando ao Spring o gerenciamento do objeto
+public class ClientService implements CrudService<Client> {
     @Autowired
     private ClientRepository clientRepository;
 
