@@ -33,4 +33,44 @@ public class Payment {
 
     @Column(nullable = false)
     private OffsetDateTime paymentDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public OffsetDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(OffsetDateTime paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public BigDecimal getValuePayment() {
+        return valuePayment;
+    }
+
+    public void setValuePayment(BigDecimal valuePayment) {
+        this.valuePayment = valuePayment;
+    }
 }

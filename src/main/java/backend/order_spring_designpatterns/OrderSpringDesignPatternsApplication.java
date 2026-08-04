@@ -10,7 +10,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    /* O bean (objeto gerenciado pelo SPring) @Component e suas especializações (como @Repository, @Controller e
+    /* O bean (objeto gerenciado pelo Spring) @Component e suas especializações (como @Repository, @Controller e
     @Service) têm escopo Singleton por padrão. */
 
     /* @Autowired realiza a injeção de dependência automática, permitindo que o Spring forneça um bean (objeto
