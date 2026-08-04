@@ -8,14 +8,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-// Definição da entidade Order (Pedido)
+// DefiniçãOo da entidade Order (Pedido)
 @Entity
+@Table(name = "Orders")
 public class Order {
     // Chave primária com auto-incremento
     @Id
@@ -48,4 +50,60 @@ public class Order {
 
     @Column(nullable = false)
     private OffsetDateTime creationDate;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public OffsetDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(OffsetDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public BigDecimal getTotalvalue() {
+        return totalvalue;
+    }
+
+    public void setTotalvalue(BigDecimal totalvalue) {
+        this.totalvalue = totalvalue;
+    }
 }
