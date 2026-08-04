@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Controller;
 
+import backend.order_spring_designpatterns.DTO.OrderRequestDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class OrderRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> update(@RequestBody Order order, @PathVariable Long id){
-        return ResponseEntity.ok(orderService.update(order, id));
+    public ResponseEntity<Order> update(@RequestBody OrderRequestDTO orderDTO, @PathVariable Long id){
+        return ResponseEntity.ok(orderService.update(orderDTO, id));
     }
 
     @DeleteMapping("/{id}")
@@ -44,7 +45,7 @@ public class OrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> insert(@RequestBody Order order){
-        return ResponseEntity.ok(orderService.insert(order));
+    public ResponseEntity<Order> insert(@RequestBody OrderRequestDTO orderDTO){
+        return ResponseEntity.ok(orderService.insert(orderDTO));
     }
 }

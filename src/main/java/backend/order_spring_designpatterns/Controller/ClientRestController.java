@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Controller;
 
+import backend.order_spring_designpatterns.DTO.ClientRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class ClientRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@RequestBody Client client, @PathVariable Long id){
-        return ResponseEntity.ok(clientService.update(client, id));
+    public ResponseEntity<Client> update(@RequestBody ClientRequestDTO clientDTO, @PathVariable Long id){
+        return ResponseEntity.ok(clientService.update(clientDTO, id));
     }
 
     @DeleteMapping("/{id}")
@@ -44,7 +45,7 @@ public class ClientRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Client> insert(@RequestBody Client client){
-        return ResponseEntity.ok(clientService.insert(client));
+    public ResponseEntity<Client> insert(@RequestBody ClientRequestDTO clientDTO){
+        return ResponseEntity.ok(clientService.insert(clientDTO));
     }
 }
