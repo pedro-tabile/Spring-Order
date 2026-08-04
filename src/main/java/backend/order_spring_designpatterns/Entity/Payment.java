@@ -24,7 +24,7 @@ public class Payment {
     private Order order;
 
     @Column(nullable = false)
-    private BigDecimal value;
+    private BigDecimal valuePayment;
 
     // Não permite campo vazio ou somente com espaços
     @NotBlank

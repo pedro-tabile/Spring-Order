@@ -4,7 +4,6 @@ import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("produtos")
+@RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
+@RequestMapping("/products")
 // Classe responsável pelo controle de requisições e respostas da API para operações com produtos
 public class ProductRestController {
     @Autowired
@@ -44,7 +44,7 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> delete(@RequestBody Product product){
+    public ResponseEntity<Product> insert(@RequestBody Product product){
         return ResponseEntity.ok(productService.insert(product));
     }
 }
