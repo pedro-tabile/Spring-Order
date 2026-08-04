@@ -1,12 +1,13 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductService implements CrudService<Product> {
+public class ProductService implements CrudService<Product, Long, ProductRequestDTO> {
     @Autowired
     private ProductRepository productRepository;
 
@@ -19,16 +20,18 @@ public class ProductService implements CrudService<Product> {
         return productRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 
-    public Product insert(Product product){
-        productRepository.save(product);
+    //TODO: atualizar infos necessárias com base nos campos da entidade
+    public Product insert(ProductRequestDTO productDTO){
+        //productRepository.save(productDTO);
 
-        return product;
+        return new Product();
     }
 
-    public Product update(Product product, Long id){
+    //TODO: atualizações conforme insert
+    public Product update(ProductRequestDTO productDTO, Long id){
         findById(id);
 
-        return productRepository.save(product);
+        return new Product();
     }
 
     public void delete(Long id){

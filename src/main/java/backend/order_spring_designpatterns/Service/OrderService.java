@@ -1,12 +1,14 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.OrderRequestDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderService implements CrudService<Order> {
+public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     @Autowired
     private OrderRepository orderRepository;
 
@@ -19,16 +21,19 @@ public class OrderService implements CrudService<Order> {
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 
-    public Order insert(Order order){
-        orderRepository.save(order);
+    //TODO: definir como serão adicionados os itens do produto e atualizar infos necessárias com base nos campos da entidade
+    public Order insert(OrderRequestDTO orderDTO){
+        Order order = new Order();
 
+        orderRepository.save(order);
         return order;
     }
 
-    public Order update(Order order, Long id){
+    //TODO: atualizações conforme insert
+    public Order update(OrderRequestDTO orderDTO, Long id){
         findById(id);
 
-        return orderRepository.save(order);
+        return new Order();
     }
 
     public void delete(Long id){
