@@ -3,7 +3,9 @@ package backend.order_spring_designpatterns.Service;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OrderService implements CrudService<Order> {
     @Autowired
     private OrderRepository orderRepository;

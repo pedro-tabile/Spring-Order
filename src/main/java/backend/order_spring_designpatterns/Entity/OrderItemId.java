@@ -25,4 +25,12 @@ public class OrderItemId implements Serializable {
     public int hashCode() {
         return Objects.hash(productId, orderId);
     }
+
+    public OrderItemId() {
+    }
+
+    public OrderItemId(Long orderId, Long productId) {
+        this.orderId = orderId;
+        this.productId = productId;
+    }
 }
