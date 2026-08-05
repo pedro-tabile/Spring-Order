@@ -1,6 +1,6 @@
-package backend.order_spring_designpatterns.DTO;
+package backend.order_spring_designpatterns.DTO.Request;
 
-// Classe responsável por definir o transporte de dados da requisição ao service, delimitando informações específicas
+// Classe responsável por definir o transporte de dados da requisição ao ClientService, delimitando informações específicas
 public class ClientRequestDTO {
     private String name;
     private String email;

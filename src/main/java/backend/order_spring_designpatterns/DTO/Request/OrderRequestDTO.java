@@ -1,8 +1,8 @@
-package backend.order_spring_designpatterns.DTO;
+package backend.order_spring_designpatterns.DTO.Request;
 
 import java.util.List;
 
-// Classe responsável por definir o transporte de dados da requisição ao service, delimitando informações específicas
+// Classe responsável por definir o transporte de dados da requisição ao OrderService, delimitando informações específicas
 public class OrderRequestDTO {
     private Long clientId;
     private List<OrderItemRequestDTO> orderItems;

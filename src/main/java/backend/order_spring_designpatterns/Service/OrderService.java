@@ -1,7 +1,8 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.OrderItemRequestDTO;
-import backend.order_spring_designpatterns.DTO.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Response.OrderResponseDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -28,7 +29,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     @Autowired
     private PaymentService paymentService;
 
-    public Iterable<Order> findAll(){
+    public List<Order> findAll(){
         return orderRepository.findAll();
     }
 
@@ -37,19 +38,23 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 
-    //TODO: payment,
+    //TODO: Transaction
     public Order insert(OrderRequestDTO orderDTO){
+        /* Primeira parte da inserção responsável pelo armazenamento de informações not null para geração de id, de
+        forma a permitir a inserção de valores OrderItem com a referência a este order criado. */
         Client client = clientService.findById(orderDTO.getClientId());
-
         Order order = new Order();
         order.setClient(client);
         order.setStatus(StatusOrderEnum.PENDING);
         order.setCreationDate(OffsetDateTime.now());
+        order.setPayment(null);
+
+        order = orderRepository.save(order);
+
         order.setOrderItems(getOrderItemsInRequestList(orderDTO.getOrderItems(), order));
-        order.setTotalvalue(order.getOrderItems().stream()
+        order.setTotalValue(order.getOrderItems().stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-
         Payment payment = paymentService.insert(orderDTO.getPaymentDTO(), order);
         order.setPayment(payment);
 

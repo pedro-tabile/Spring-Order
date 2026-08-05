@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.OrderItemRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Product;

@@ -1,8 +1,8 @@
-package backend.order_spring_designpatterns.DTO;
+package backend.order_spring_designpatterns.DTO.Request;
 
 import java.math.BigDecimal;
 
-// Classe responsável por definir o transporte de dados da requisição ao service, delimitando informações específicas
+// Classe responsável por definir o transporte de dados da requisição ao ProductService, delimitando informações específicas
 public class ProductRequestDTO {
     private String name;
     private BigDecimal price;

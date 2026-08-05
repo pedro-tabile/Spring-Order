@@ -1,6 +1,7 @@
 package backend.order_spring_designpatterns.Controller;
 
-import backend.order_spring_designpatterns.DTO.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Response.OrderResponseDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
 @RequestMapping("/orders")
 // Classe responsável pelo controle de requisições e respostas da API para operações com pedidos
@@ -23,19 +26,28 @@ public class OrderRestController {
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
     @GetMapping
-    public ResponseEntity<Iterable<Order>> findAll(){
+    public ResponseEntity<List<OrderResponseDTO>> findAll(){
+        List<Order> orders = orderService.findAll();
+        List<OrderResponseDTO> ordersResponse = orders.stream().map(OrderResponseDTO::new).toList();
+
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
-        return ResponseEntity.ok(orderService.findAll());
+        return ResponseEntity.ok(ordersResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> findById(@PathVariable Long id){
-        return ResponseEntity.ok(orderService.findById(id));
+    public ResponseEntity<OrderResponseDTO> findById(@PathVariable Long id){
+        Order orderFound = orderService.findById(id);
+        OrderResponseDTO orderResponse = new OrderResponseDTO(orderFound);
+
+        return ResponseEntity.ok(orderResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> update(@RequestBody OrderRequestDTO orderDTO, @PathVariable Long id){
-        return ResponseEntity.ok(orderService.update(orderDTO, id));
+    public ResponseEntity<OrderResponseDTO> update(@RequestBody OrderRequestDTO orderRequestDTO, @PathVariable Long id){
+        Order orderUpdate = orderService.update(orderRequestDTO, id);
+        OrderResponseDTO orderResponse = new OrderResponseDTO(orderUpdate);
+
+        return ResponseEntity.ok(orderResponse);
     }
 
     @DeleteMapping("/{id}")
@@ -45,7 +57,10 @@ public class OrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> insert(@RequestBody OrderRequestDTO orderDTO){
-        return ResponseEntity.ok(orderService.insert(orderDTO));
+    public ResponseEntity<OrderResponseDTO> insert(@RequestBody OrderRequestDTO orderRequestDTO){
+        Order orderSave = orderService.insert(orderRequestDTO);
+        OrderResponseDTO orderResponse = new OrderResponseDTO(orderSave);
+
+        return ResponseEntity.ok(orderResponse);
     }
 }
