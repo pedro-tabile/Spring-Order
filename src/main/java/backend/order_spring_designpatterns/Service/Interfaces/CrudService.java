@@ -1,4 +1,4 @@
-package backend.order_spring_designpatterns.Service;
+package backend.order_spring_designpatterns.Service.Interfaces;
 
 // Interface que estabelece contrato de operações CRUD para Services
 public interface CrudService<T, ID, DTO> {

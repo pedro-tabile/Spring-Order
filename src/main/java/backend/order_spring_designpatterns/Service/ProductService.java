@@ -3,6 +3,7 @@ package backend.order_spring_designpatterns.Service;
 import backend.order_spring_designpatterns.DTO.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
+import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,24 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
 
     //TODO: atualizar infos necessárias com base nos campos da entidade
     public Product insert(ProductRequestDTO productDTO){
-        //productRepository.save(productDTO);
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
 
-        return new Product();
+        productRepository.save(product);
+        return product;
     }
 
     //TODO: atualizações conforme insert
     public Product update(ProductRequestDTO productDTO, Long id){
-        findById(id);
+        Product productById = findById(id);
+        productById.setName(productDTO.getName());
+        productById.setPrice(productDTO.getPrice());
+        productById.setStock(productDTO.getStock());
 
-        return new Product();
+        productRepository.save(productById);
+        return productById;
     }
 
     public void delete(Long id){

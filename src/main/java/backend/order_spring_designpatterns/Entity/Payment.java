@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Entity;
 
+import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import java.time.OffsetDateTime;
 public class Payment {
     // Chave primária com auto-incremento
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     private Long id;
 
     /* Definição de relação 1-1 com a tabela Order e lado não dominante (inverse side) de relacionamento bidirecional,
@@ -23,13 +24,15 @@ public class Payment {
     @OneToOne(mappedBy = "payment")
     private Order order;
 
+    // Não permite campo vazio ou somente com espaços
+    @NotBlank
     @Column(nullable = false)
-    private BigDecimal valuePayment;
+    private StatusPaymentEnum status;
 
     // Não permite campo vazio ou somente com espaços
     @NotBlank
     @Column(nullable = false)
-    private String status;
+    private String type;
 
     @Column(nullable = false)
     private OffsetDateTime paymentDate;
@@ -58,19 +61,19 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public String getStatus() {
+    public StatusPaymentEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusPaymentEnum status) {
         this.status = status;
     }
 
-    public BigDecimal getValuePayment() {
-        return valuePayment;
+    public String getType() {
+        return type;
     }
 
-    public void setValuePayment(BigDecimal valuePayment) {
-        this.valuePayment = valuePayment;
+    public void setType(String type) {
+        this.type = type;
     }
 }

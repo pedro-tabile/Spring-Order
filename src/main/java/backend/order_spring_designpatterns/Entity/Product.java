@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class Product {
     // Chave primária com auto-incremento
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     private Long id;
 
     // Não permite campo vazio ou somente com espaços

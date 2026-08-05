@@ -3,6 +3,7 @@ package backend.order_spring_designpatterns.Service;
 import backend.order_spring_designpatterns.DTO.ClientRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Repository.ClientRepository;
+import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
