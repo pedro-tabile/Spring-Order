@@ -1,0 +1,37 @@
+package backend.order_spring_designpatterns.Service;
+
+import backend.order_spring_designpatterns.DTO.OrderItemRequestDTO;
+import backend.order_spring_designpatterns.DTO.PaymentRequestDTO;
+import backend.order_spring_designpatterns.Entity.Order;
+import backend.order_spring_designpatterns.Entity.OrderItem;
+import backend.order_spring_designpatterns.Entity.Payment;
+import backend.order_spring_designpatterns.Entity.Product;
+import backend.order_spring_designpatterns.Repository.OrderItemRepository;
+import backend.order_spring_designpatterns.Repository.PaymentRepository;
+import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+
+@Service
+public class PaymentService {
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    public Payment insert(PaymentRequestDTO paymentRequestDTO, Order order) {
+        Payment payment = new Payment();
+
+        /* Uma vez que "order" corresponde ao objeto passado como parâmetro, sendo uma referência ao Order recebido de
+        OrderService.insert(), o campo order_id da tabela OrderItem será preenchido pelo JPA com o id gerado para tal
+        Order durante sua criação. Isso ocorre porque houve declaração de relacionamente entre as entidades/campos */
+        payment.setOrder(order);
+        payment.setPaymentDate(OffsetDateTime.now());
+        payment.setType(paymentRequestDTO.getType());
+        payment.setStatus(StatusPaymentEnum.PENDING);
+
+        paymentRepository.save(payment);
+        return payment;
+    }
+}

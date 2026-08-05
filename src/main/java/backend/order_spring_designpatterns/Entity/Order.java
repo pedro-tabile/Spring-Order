@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Entity;
 
+import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ import java.util.List;
 public class Order {
     // Chave primária com auto-incremento
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     private Long id;
 
     // Definição de relação n-1 com a tabela Client - unidirecional
@@ -46,7 +47,7 @@ public class Order {
     // Não permite campo vazio ou somente com espaços
     @NotBlank
     @Column(nullable = false)
-    private String status;
+    private StatusOrderEnum status;
 
     @Column(nullable = false)
     private OffsetDateTime creationDate;
@@ -91,11 +92,11 @@ public class Order {
         this.payment = payment;
     }
 
-    public String getStatus() {
+    public StatusOrderEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusOrderEnum status) {
         this.status = status;
     }
 
