@@ -1,18 +1,20 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.ProductRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService implements CrudService<Product, Long, ProductRequestDTO> {
     @Autowired
     private ProductRepository productRepository;
 
-    public Iterable<Product> findAll(){
+    public List<Product> findAll(){
         return productRepository.findAll();
     }
 

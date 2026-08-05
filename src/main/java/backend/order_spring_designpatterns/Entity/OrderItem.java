@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ public class OrderItem {
     private Product product;
 
     // Definição de relação n-1 com a tabela Order - unidirecional
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     // Coluna definida como order_id e como FK
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;

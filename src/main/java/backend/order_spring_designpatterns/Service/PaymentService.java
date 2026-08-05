@@ -1,18 +1,13 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.OrderItemRequestDTO;
-import backend.order_spring_designpatterns.DTO.PaymentRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PaymentRequestDTO;
 import backend.order_spring_designpatterns.Entity.Order;
-import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Payment;
-import backend.order_spring_designpatterns.Entity.Product;
-import backend.order_spring_designpatterns.Repository.OrderItemRepository;
 import backend.order_spring_designpatterns.Repository.PaymentRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Service
