@@ -50,6 +50,14 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
+    @PutMapping("/{id}/payment")
+    public ResponseEntity<OrderResponseDTO> updateOrderPaid(@PathVariable Long id){
+        Order orderUpdate = orderService.updatePaid(id);
+        OrderResponseDTO orderResponse = new OrderResponseDTO(orderUpdate);
+
+        return ResponseEntity.ok(orderResponse);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Order> delete(@PathVariable Long id){
         orderService.delete(id);
