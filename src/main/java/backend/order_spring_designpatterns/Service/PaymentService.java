@@ -29,4 +29,15 @@ public class PaymentService {
         paymentRepository.save(payment);
         return payment;
     }
+
+    public Payment findById(Long id) {
+        // O .get() retorna o valor ou lança uma exceção caso o valor seja null
+        return paymentRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
+    }
+
+    public void updateById(Long id, PaymentRequestDTO paymentRequest){
+        Payment payment = findById(id);
+        payment.setType(paymentRequest.getType());
+        paymentRepository.save(payment);
+    }
 }

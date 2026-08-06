@@ -2,7 +2,6 @@ package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
-import backend.order_spring_designpatterns.DTO.Response.OrderResponseDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -39,10 +38,10 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     }
 
     //TODO: Transaction
-    public Order insert(OrderRequestDTO orderDTO){
+    public Order insert(OrderRequestDTO orderRequest){
         /* Primeira parte da inserção responsável pelo armazenamento de informações not null para geração de id, de
         forma a permitir a inserção de valores OrderItem com a referência a este order criado. */
-        Client client = clientService.findById(orderDTO.getClientId());
+        Client client = clientService.findById(orderRequest.getClientId());
         Order order = new Order();
         order.setClient(client);
         order.setStatus(StatusOrderEnum.PENDING);
@@ -51,11 +50,17 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
 
         order = orderRepository.save(order);
 
-        order.setOrderItems(getOrderItemsInRequestList(orderDTO.getOrderItems(), order));
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (var item : orderRequest.getOrderItems()){
+            OrderItem orderItem = orderItemService.insert(item, order);
+            orderItems.add(orderItem);
+        }
+        order.setOrderItems(orderItems);
         order.setTotalValue(order.getOrderItems().stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        Payment payment = paymentService.insert(orderDTO.getPaymentDTO(), order);
+
+        Payment payment = paymentService.insert(orderRequest.getPaymentDTO(), order);
         order.setPayment(payment);
 
         orderRepository.save(order);
@@ -63,25 +68,34 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     }
 
     //TODO: atualizações conforme insert
-    public Order update(OrderRequestDTO orderDTO, Long id){
-        findById(id);
+    public Order update(OrderRequestDTO orderRequest, Long id){
+        Order orderSaved = findById(id);
 
-        return new Order();
+        Client client = clientService.findById(orderRequest.getClientId());
+        orderSaved.setClient(client);
+
+        for (OrderItemRequestDTO item : orderRequest.getOrderItems()){
+            OrderItem orderItem = orderItemService.findByProductAndOrderId(item.getProductId(), orderSaved.getId());
+
+            if (orderItem != null){
+                orderItemService.updateFromDTOData(item, orderItem);
+            } else {
+                OrderItem newOrderItem = orderItemService.insert(item, orderSaved);
+                orderSaved.getOrderItems().add(newOrderItem);
+            }
+        }
+
+        orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
+                .map(OrderItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.getPaymentDTO());
+
+        orderRepository.save(orderSaved);
+        return orderSaved;
     }
 
     public void delete(Long id){
         findById(id);
         orderRepository.deleteById(id);
-    }
-
-    public List<OrderItem> getOrderItemsInRequestList(List<OrderItemRequestDTO> orderItemsRequest, Order order){
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        for (var item : orderItemsRequest){
-           OrderItem orderItem = orderItemService.insert(item, order);
-           orderItems.add(orderItem);
-        }
-
-        return orderItems;
     }
 }
