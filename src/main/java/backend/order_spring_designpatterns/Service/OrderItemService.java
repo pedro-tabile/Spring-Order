@@ -17,9 +17,9 @@ public class OrderItemService {
     @Autowired
     private ProductService productService;
 
-    public OrderItem insert(OrderItemRequestDTO orderItemDTO, Order order) {
-        Product product = productService.findById(orderItemDTO.getProductId());
-        Integer productAmount = orderItemDTO.getAmount();
+    public OrderItem insert(OrderItemRequestDTO orderItemRequest, Order order) {
+        Product product = productService.findById(orderItemRequest.getProductId());
+        Integer productAmount = orderItemRequest.getAmount();
         BigDecimal totalPrice = product.getPrice().multiply(BigDecimal.valueOf(productAmount.longValue()));
 
         OrderItem orderItem = new OrderItem();
@@ -34,5 +34,19 @@ public class OrderItemService {
 
         orderItemRepository.save(orderItem);
         return orderItem;
+    }
+
+    public OrderItem findByProductAndOrderId(Long productId, Long orderId){
+        return orderItemRepository.findByProductAndOrderId(productId, orderId);
+    }
+
+    public void updateFromDTOData(OrderItemRequestDTO orderItemRequest, OrderItem orderItemSaved){
+        Product product = productService.findById(orderItemRequest.getProductId());
+        orderItemSaved.setAmount(orderItemRequest.getAmount());
+        BigDecimal totalPrice = product.getPrice().multiply(
+                BigDecimal.valueOf(orderItemRequest.getAmount().longValue())
+        );
+        orderItemSaved.setTotalPrice(totalPrice);
+        orderItemRepository.save(orderItemSaved);
     }
 }
