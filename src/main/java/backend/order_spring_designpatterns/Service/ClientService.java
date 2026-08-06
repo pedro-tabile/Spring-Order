@@ -20,7 +20,6 @@ public class ClientService implements CrudService<Client, Long, ClientRequestDTO
     }
 
     public Client findById(Long id){
-        // O .get() retorna o valor ou lança uma exceção caso o valor seja null
         return clientRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 

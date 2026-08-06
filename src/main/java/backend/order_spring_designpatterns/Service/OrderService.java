@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -33,7 +34,6 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     }
 
     public Order findById(Long id){
-        // O .get() retorna o valor ou lança uma exceção caso o valor seja null
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 
@@ -67,21 +67,33 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         return order;
     }
 
-    //TODO: atualizações conforme insert
     public Order update(OrderRequestDTO orderRequest, Long id){
         Order orderSaved = findById(id);
 
         Client client = clientService.findById(orderRequest.getClientId());
         orderSaved.setClient(client);
 
-        for (OrderItemRequestDTO item : orderRequest.getOrderItems()){
-            OrderItem orderItem = orderItemService.findByProductAndOrderId(item.getProductId(), orderSaved.getId());
+        for (OrderItemRequestDTO itemRequest : orderRequest.getOrderItems()){
+            OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.getProductId(), orderSaved.getId());
 
             if (orderItem != null){
-                orderItemService.updateFromDTOData(item, orderItem);
+                orderItemService.updateFromDTOData(itemRequest, orderItem);
             } else {
-                OrderItem newOrderItem = orderItemService.insert(item, orderSaved);
+                OrderItem newOrderItem = orderItemService.insert(itemRequest, orderSaved);
                 orderSaved.getOrderItems().add(newOrderItem);
+            }
+        }
+
+        // Verifica se cada item salvo na lista atual do pedido (Order) também está presente na nova lista recebida
+        Iterator<OrderItem> iteratorOrderItems = orderSaved.getOrderItems().iterator();
+        while (iteratorOrderItems.hasNext()){
+            OrderItem atualValue = iteratorOrderItems.next();
+            boolean presentInNewList = orderRequest.getOrderItems().stream()
+                    .anyMatch(e -> e.getProductId().equals(atualValue.getProduct().getId()));
+
+            if (!presentInNewList) {
+                orderItemService.deleteById(atualValue.getId());
+                iteratorOrderItems.remove();
             }
         }
 
