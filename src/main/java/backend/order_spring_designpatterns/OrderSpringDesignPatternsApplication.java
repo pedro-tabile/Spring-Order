@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class OrderSpringDesignPatternsApplication {
-    //TODO: implementar updates em services não CRUD
+    //TODO: /payment
 
     public static void main(String[] args) {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);

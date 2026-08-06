@@ -26,7 +26,7 @@ public class OrderItem {
     private Product product;
 
     // Definição de relação n-1 com a tabela Order - unidirecional
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     // Coluna definida como order_id e como FK
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;

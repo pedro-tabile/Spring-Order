@@ -19,7 +19,6 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     }
 
     public Product findById(Long id){
-        // O .get() retorna o valor ou lança uma exceção caso o valor seja null
         return productRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 

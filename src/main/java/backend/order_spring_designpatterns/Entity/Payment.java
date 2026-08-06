@@ -81,4 +81,17 @@ public class Payment {
     public void setType(String type) {
         this.type = type;
     }
+
+
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", order=" + order.getId() +
+                ", status=" + status +
+                ", type='" + type + '\'' +
+                ", paymentDate=" + paymentDate +
+                '}';
+    }
 }

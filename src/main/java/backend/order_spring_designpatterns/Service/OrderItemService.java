@@ -49,4 +49,8 @@ public class OrderItemService {
         orderItemSaved.setTotalPrice(totalPrice);
         orderItemRepository.save(orderItemSaved);
     }
+
+    public void deleteById(Long id){
+        orderItemRepository.deleteById(id);
+    }
 }

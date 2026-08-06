@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -31,9 +32,13 @@ public class PaymentService {
     }
 
     public Payment findById(Long id) {
-        // O .get() retorna o valor ou lança uma exceção caso o valor seja null
         return paymentRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
+
+    public List<Payment> findAll(){
+        return paymentRepository.findAll();
+    }
+
 
     public void updateById(Long id, PaymentRequestDTO paymentRequest){
         Payment payment = findById(id);
