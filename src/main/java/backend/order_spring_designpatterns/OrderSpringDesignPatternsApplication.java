@@ -5,12 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class OrderSpringDesignPatternsApplication {
+    //TODO: regras de negócio de pedido (estoque), transaction, implementação de métodos de pagamento, tratamento de erros
 
     public static void main(String[] args) {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    /* O bean (objeto gerenciado pelo SPring) @Component e suas especializações (como @Repository, @Controller e
+    /* O bean (objeto gerenciado pelo Spring) @Component e suas especializações (como @Repository, @Controller e
     @Service) têm escopo Singleton por padrão. */
 
     /* @Autowired realiza a injeção de dependência automática, permitindo que o Spring forneça um bean (objeto
