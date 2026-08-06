@@ -37,7 +37,6 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
     }
 
-    //TODO: Transaction
     public Order insert(OrderRequestDTO orderRequest){
         /* Primeira parte da inserção responsável pelo armazenamento de informações not null para geração de id, de
         forma a permitir a inserção de valores OrderItem com a referência a este order criado. */
@@ -101,6 +100,15 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
         paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.getPaymentDTO());
+
+        orderRepository.save(orderSaved);
+        return orderSaved;
+    }
+
+    public Order updatePaid(Long id){
+        Order orderSaved = findById(id);
+        orderSaved.setStatus(StatusOrderEnum.CONCLUDED);
+        paymentService.updatePaid(orderSaved.getPayment().getId());
 
         orderRepository.save(orderSaved);
         return orderSaved;

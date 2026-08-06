@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class OrderSpringDesignPatternsApplication {
-    //TODO: /payment
+    //TODO: regras de negócio de pedido (estoque), transaction, implementação de métodos de pagamento, tratamento de erros
 
     public static void main(String[] args) {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);

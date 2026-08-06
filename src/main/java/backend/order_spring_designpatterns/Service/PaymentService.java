@@ -45,4 +45,10 @@ public class PaymentService {
         payment.setType(paymentRequest.getType());
         paymentRepository.save(payment);
     }
+
+    public void updatePaid(Long id){
+        Payment payment = findById(id);
+        payment.setStatus(StatusPaymentEnum.APPROVED);
+        paymentRepository.save(payment);
+    }
 }
