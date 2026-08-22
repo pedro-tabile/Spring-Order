@@ -1,14 +1,14 @@
 <div align="center">
 
-# <u> Order Spring - Design Patterns </u>
+# <u> 🛠️ Order Spring - Design Patterns </u>
 
 </div>
-
-<br>
 
 Este é um projeto desenvolvido para o curso da **DIO (Digital Innovation One)** no Bootcamp de Java AI.
 
 > **Aviso:** A ideia deste projeto, assim como o seu contexto e as ações necessárias, foram fornecidas por uma Inteligência Artificial (IA). O desenvolvimento e o código-fonte passaram por várias adaptações para focar exclusivamente na implementação dos **Design Patterns** (Singleton e Facade), sendo um desenvolvimento voltado para fins didáticos. Dessa forma, o sistema foi projetado de modo simples, não apresentando validações complexas, tratamento de exceções ou lógicas de difícil compreensão.
+
+<br>
 
 ## 🚀 O que o projeto faz?
 
@@ -18,6 +18,8 @@ O projeto simula um sistema de gerenciamento de **Pedidos (Orders)** de uma loja
 *   Gerenciamento de Pedidos (Orders) contendo Itens de Pedido (Order Items)
 *   Processamento de Pagamentos (Payments)
 
+<br>
+
 ## 🧩 Implementação de Design Patterns
 
 Neste projeto, os seguintes padrões de projeto **(Design Patterns)** foram implementados:
@@ -25,7 +27,9 @@ Neste projeto, os seguintes padrões de projeto **(Design Patterns)** foram impl
 1.  **Singleton:** No ecossistema Spring Boot, a injeção de dependências (IoC) utiliza o Singleton por padrão - neste projeto, utilizou-se a anotação `@Autowired` nas variáveis: injeção interna realizada pelo Spring, com **Singleton** como padrão para cada `@Bean`. Classes anotadas com `@Service`, `@RestController` e `@Repository` são instanciadas uma única vez e gerenciadas pelo container do Spring, garantindo uma única instância por toda a aplicação para processamento das lógicas de negócio.
 2.  **Facade:** O padrão Facade foi aplicado na arquitetura através, principalmente, dos **Services**, os quais orquestram a implementação de interfaces e o processamento de informações transportadas, ocultando a complexidade da comunicação com repositórios e entidades do banco de dados ao mesmo tempo.
 
-## 🛠 Funcionalidades Oferecidas e Endpoints
+<br>
+
+## 🌐 Endpoints e Funcionalidades Oferecidas
 
 *   **API RESTful** para operações CRUD (Create, Read, Update, Delete) de:
     *   Clientes (`/clients`)
@@ -33,6 +37,8 @@ Neste projeto, os seguintes padrões de projeto **(Design Patterns)** foram impl
     *   Pedidos (`/orders`)
 *   Documentação e testes da API integrados através do **Swagger/OpenAPI**.
 *   Banco de dados em memória, ideal para prototipagem rápida e armazenamento simples, sem configurações de máquina.
+
+<br>
 
 ## 🏗 Arquitetura do Projeto
 
@@ -42,6 +48,8 @@ O projeto foi organizado utilizando uma arquitetura baseada em camadas (Layered 
 *   **Repositórios (`Repository`):** Interfaces que abstraem o acesso aos dados utilizando Spring Data JPA.
 *   **Entidades (`Entity`):** Representação das tabelas no banco de dados.
 *   **DTOs (`DTO`):** Transferência de dados segura e formatada entre as requisições e respostas (separando entrada/saída das entidades reais persistidas no banco).
+
+<br>
 
 ## 💻 Tecnologias Utilizadas
 
@@ -53,6 +61,8 @@ O projeto foi organizado utilizando uma arquitetura baseada em camadas (Layered 
 *   **H2 Database** (Banco de dados em memória)
 *   **Springdoc OpenAPI** (Swagger UI para documentação)
 *   **Gradle** (Ferramenta de automação de builds)
+
+<br>
 
 ## 🧱 Estrutura das entidades - API
 
@@ -140,6 +150,8 @@ Cliente `client`:
 }
 ```
 
+<br>
+
 ## 📖 Exemplos de Uso da API
 
 Você pode testar a API acessando o **Swagger UI**. Assim que a aplicação estiver rodando, acesse no seu navegador:
@@ -178,6 +190,8 @@ Exemplo de **Criação de Cliente (POST)** via JSON:
   "orderItems": "pedrohenrique@gmail.com"
 }
 ```
+
+<br>
 
 ## ⚙️ Passo a Passo para clonar e utilizar
 
