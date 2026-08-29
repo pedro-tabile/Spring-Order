@@ -40,7 +40,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     public Order insert(OrderRequestDTO orderRequest){
         /* Primeira parte da inserção responsável pelo armazenamento de informações not null para geração de id, de
         forma a permitir a inserção de valores OrderItem com a referência a este order criado. */
-        Client client = clientService.findById(orderRequest.getClientId());
+        Client client = clientService.findById(orderRequest.clientId());
         Order order = new Order();
         order.setClient(client);
         order.setStatus(StatusOrderEnum.PENDING);
@@ -50,7 +50,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         order = orderRepository.save(order);
 
         List<OrderItem> orderItems = new ArrayList<>();
-        for (var item : orderRequest.getOrderItems()){
+        for (var item : orderRequest.orderItems()){
             OrderItem orderItem = orderItemService.insert(item, order);
             orderItems.add(orderItem);
         }
@@ -59,7 +59,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
-        Payment payment = paymentService.insert(orderRequest.getPaymentDTO(), order);
+        Payment payment = paymentService.insert(orderRequest.paymentDTO(), order);
         order.setPayment(payment);
 
         orderRepository.save(order);
@@ -69,11 +69,11 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     public Order update(OrderRequestDTO orderRequest, Long id){
         Order orderSaved = findById(id);
 
-        Client client = clientService.findById(orderRequest.getClientId());
+        Client client = clientService.findById(orderRequest.clientId());
         orderSaved.setClient(client);
 
-        for (OrderItemRequestDTO itemRequest : orderRequest.getOrderItems()){
-            OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.getProductId(), orderSaved.getId());
+        for (OrderItemRequestDTO itemRequest : orderRequest.orderItems()){
+            OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.productId(), orderSaved.getId());
 
             if (orderItem != null){
                 orderItemService.updateFromDTOData(itemRequest, orderItem);
@@ -87,8 +87,8 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         Iterator<OrderItem> iteratorOrderItems = orderSaved.getOrderItems().iterator();
         while (iteratorOrderItems.hasNext()){
             OrderItem atualValue = iteratorOrderItems.next();
-            boolean presentInNewList = orderRequest.getOrderItems().stream()
-                    .anyMatch(e -> e.getProductId().equals(atualValue.getProduct().getId()));
+            boolean presentInNewList = orderRequest.orderItems().stream()
+                    .anyMatch(e -> e.productId().equals(atualValue.getProduct().getId()));
 
             if (!presentInNewList) {
                 orderItemService.deleteById(atualValue.getId());
@@ -99,7 +99,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.getPaymentDTO());
+        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.paymentDTO());
 
         orderRepository.save(orderSaved);
         return orderSaved;

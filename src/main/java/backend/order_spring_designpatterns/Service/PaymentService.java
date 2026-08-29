@@ -24,7 +24,7 @@ public class PaymentService {
         Order durante sua criação. Isso ocorre porque houve declaração de relacionamente entre as entidades/campos */
         payment.setOrder(order);
         payment.setPaymentDate(OffsetDateTime.now());
-        payment.setType(paymentRequestDTO.getType());
+        payment.setType(paymentRequestDTO.type());
         payment.setStatus(StatusPaymentEnum.PENDING);
 
         paymentRepository.save(payment);
@@ -39,10 +39,9 @@ public class PaymentService {
         return paymentRepository.findAll();
     }
 
-
     public void updateById(Long id, PaymentRequestDTO paymentRequest){
         Payment payment = findById(id);
-        payment.setType(paymentRequest.getType());
+        payment.setType(paymentRequest.type());
         paymentRepository.save(payment);
     }
 

@@ -25,8 +25,8 @@ public class ClientService implements CrudService<Client, Long, ClientRequestDTO
 
     public Client insert(ClientRequestDTO clientDTO){
         Client client = new Client();
-        client.setName(clientDTO.getName());
-        client.setEmail(clientDTO.getEmail());
+        client.setName(clientDTO.name());
+        client.setEmail(clientDTO.email());
 
         clientRepository.save(client);
         return client;
@@ -34,8 +34,8 @@ public class ClientService implements CrudService<Client, Long, ClientRequestDTO
 
     public Client update(ClientRequestDTO clientDTO, Long id){
         Client clientById = findById(id);
-        clientById.setEmail(clientDTO.getEmail());
-        clientById.setName(clientDTO.getName());
+        clientById.setEmail(clientDTO.email());
+        clientById.setName(clientDTO.name());
 
         return clientRepository.save(clientById);
     }
