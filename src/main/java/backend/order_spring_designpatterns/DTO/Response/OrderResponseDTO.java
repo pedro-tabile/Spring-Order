@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/* Classe responsável por definir o transporte de dados do OrderService ao controller do Order, delimitando informações
+/* Record responsável por definir o transporte de dados do OrderService ao controller do Order, delimitando informações
 específicas para resposta à requisição */
 public record OrderResponseDTO(Long orderId,
                                Client client,

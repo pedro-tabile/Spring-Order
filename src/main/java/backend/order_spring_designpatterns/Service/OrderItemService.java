@@ -18,8 +18,8 @@ public class OrderItemService {
     private ProductService productService;
 
     public OrderItem insert(OrderItemRequestDTO orderItemRequest, Order order) {
-        Product product = productService.findById(orderItemRequest.getProductId());
-        Integer productAmount = orderItemRequest.getAmount();
+        Product product = productService.findById(orderItemRequest.productId());
+        Integer productAmount = orderItemRequest.amount();
         BigDecimal totalPrice = product.getPrice().multiply(BigDecimal.valueOf(productAmount.longValue()));
 
         OrderItem orderItem = new OrderItem();
@@ -41,10 +41,10 @@ public class OrderItemService {
     }
 
     public void updateFromDTOData(OrderItemRequestDTO orderItemRequest, OrderItem orderItemSaved){
-        Product product = productService.findById(orderItemRequest.getProductId());
-        orderItemSaved.setAmount(orderItemRequest.getAmount());
+        Product product = productService.findById(orderItemRequest.productId());
+        orderItemSaved.setAmount(orderItemRequest.amount());
         BigDecimal totalPrice = product.getPrice().multiply(
-                BigDecimal.valueOf(orderItemRequest.getAmount().longValue())
+                BigDecimal.valueOf(orderItemRequest.amount().longValue())
         );
         orderItemSaved.setTotalPrice(totalPrice);
         orderItemRepository.save(orderItemSaved);

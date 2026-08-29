@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OrderSpringDesignPatternsApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
+        // Implementação de codificador de senha com função BCrypt
+        // System.out.println(new BCryptPasswordEncoder().encode("admin"));
     }
 
     // ------------------------------ Comentários adicionais: ------------------------------

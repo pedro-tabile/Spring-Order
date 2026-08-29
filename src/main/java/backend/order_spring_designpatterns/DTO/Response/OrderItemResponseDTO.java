@@ -5,7 +5,7 @@ import backend.order_spring_designpatterns.Entity.Product;
 
 import java.math.BigDecimal;
 
-/* Classe responsável por definir o transporte de dados de OrderItem, delimitando informações específicas para resposta
+/* Record responsável por definir o transporte de dados de OrderItem, delimitando informações específicas para resposta
 à requisição */
 public record OrderItemResponseDTO(Long id, Product product, Long orderId, Integer amount, BigDecimal totalPrice) {
     public OrderItemResponseDTO(OrderItem orderItem){
