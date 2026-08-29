@@ -51,7 +51,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PutMapping("/{id}/payment")
+    @PutMapping("/{id}/paid")
     public ResponseEntity<OrderResponseDTO> updateOrderPaid(@PathVariable Long id){
         Order orderUpdate = orderService.updatePaid(id);
         OrderResponseDTO orderResponse = new OrderResponseDTO(orderUpdate);

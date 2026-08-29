@@ -13,15 +13,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 // Habilita configurações de segurança personalizadas
 @EnableWebSecurity
+// Classe com configurações de segurança (Spring Security) relacionadas à autenticação e acesso aos endpoints
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // Desabilita a proteção do csrf (token)
                 .csrf(AbstractHttpConfigurer::disable)
-                // Métodos somente autorizados com autenticação
+                // Métodos/endpoints autorizados somente para usuários autenticados
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/products").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // Método de autenticação http basic
