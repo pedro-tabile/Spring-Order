@@ -13,13 +13,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-/* Serializable é a capacidade de transformar um objeto da memória em uma sequência de bytes ou em um formato plano
-(como JSON ou texto) para salvar o estado do objeto a fim de  transmiti-lo (em arquivo, envio por rede ou entre diferentes
+/* Serializable é a capacidade de transformar um objeto da memória em uma sequência de bytes ou em um formato como
+JSON ou texto para salvar o estado do objeto a fim de transmiti-lo (em arquivo, envio por rede ou entre diferentes
 sistemas), permitindo recriá-lo por meio da desserialização.*/
-// UserDetails representa as informações de usuário durante a autenticação
+
+// Classe que implementa UserDetails, representando as informações do usuário durante a autenticação
 @Data
 @AllArgsConstructor
-public class UserModel implements Serializable, UserDetails {
+public class UserAuthModel implements Serializable, UserDetails {
     // Auxilia o compilador para identificar que faz parte de um mecanismo de serialização
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,8 +28,8 @@ public class UserModel implements Serializable, UserDetails {
     private String userId, username, password;
     private RolesEnum role;
 
-    public static UserModel fromEntity(UserAuth userAuth) {
-        return new UserModel(
+    public static UserAuthModel fromEntity(UserAuth userAuth) {
+        return new UserAuthModel(
                 userAuth.getUserId().toString(),
                 userAuth.getUsername(),
                 userAuth.getPassword(),

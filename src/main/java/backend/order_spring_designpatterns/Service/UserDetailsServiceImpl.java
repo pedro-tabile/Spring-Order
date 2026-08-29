@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.Model.UserModel;
+import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+// Classe que implementa service que carrega informações específicas do usuário
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
@@ -22,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
          var userModel = userRepository.findByUsername(username)
                  .orElseThrow(() -> new UsernameNotFoundException(username));
-         return UserModel.fromEntity(userModel);
+         return UserAuthModel.fromEntity(userModel);
     }
 
     // Codificação de senhas
