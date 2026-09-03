@@ -2,8 +2,12 @@ package backend.order_spring_designpatterns.Controller;
 
 import backend.order_spring_designpatterns.DTO.Request.UserAuthRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequestDTO;
+import backend.order_spring_designpatterns.DTO.Response.LoginResponseDTO;
+import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Exception.UsernameAlreadyInUseException;
+import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Service.UserAuthService;
+import backend.order_spring_designpatterns.configs.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -23,21 +29,34 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final UserAuthService userDetailsService;
+    @Autowired
+    private TokenService tokenService;
 
-    public AuthController(UserAuthService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired
+    private UserAuthService userDetailsService;
 
-    // Endpoint personalizado para login, implementando um gerenciador de autenticação
+    // Endpoint personalizado para camada/tratamento de login, implementando um gerenciador de autenticação
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserAuthRequestDTO dataAuth){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid UserAuthRequestDTO dataAuth){
         // Representa login e senha do usuário
         var usernamePassword = new UsernamePasswordAuthenticationToken(dataAuth.username(),dataAuth.password());
         // Tentativa de autenticação com base nas informações passadas
-        authenticationManager.authenticate(usernamePassword);
+        var auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        // Geração de token; retorno do mesmo como resposta à requisição
+        var userAuthentication = (UserAuthModel) auth.getPrincipal();
+        var token = tokenService.generateToken(
+                new UserAuth(
+                        UUID.fromString(userAuthentication.getUserId()),
+                        userAuthentication.getUsername(),
+                        userAuthentication.getPassword(),
+                        userAuthentication.getRole()
+                )
+        );
+
+        LoginResponseDTO loginResponse = new LoginResponseDTO(token);
+
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/register")
