@@ -25,9 +25,9 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     //TODO: atualizar infos necessárias com base nos campos da entidade
     public Product insert(ProductRequestDTO productDTO){
         Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
-        product.setStock(productDTO.getStock());
+        product.setName(productDTO.name());
+        product.setPrice(productDTO.price());
+        product.setStock(productDTO.stock());
 
         productRepository.save(product);
         return product;
@@ -36,9 +36,9 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     //TODO: atualizações conforme insert
     public Product update(ProductRequestDTO productDTO, Long id){
         Product productById = findById(id);
-        productById.setName(productDTO.getName());
-        productById.setPrice(productDTO.getPrice());
-        productById.setStock(productDTO.getStock());
+        productById.setName(productDTO.name());
+        productById.setPrice(productDTO.price());
+        productById.setStock(productDTO.stock());
 
         productRepository.save(productById);
         return productById;

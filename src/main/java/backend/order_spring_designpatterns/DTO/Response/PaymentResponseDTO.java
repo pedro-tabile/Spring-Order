@@ -5,6 +5,8 @@ import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
 
 import java.time.OffsetDateTime;
 
+/* Record responsável por definir o transporte de dados do PaymentService ao controller do Order, delimitando informações
+específicas para resposta à requisição */
 public record PaymentResponseDTO(Long id,
                                  Long orderId,
                                  StatusPaymentEnum status,

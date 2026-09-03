@@ -1,6 +1,7 @@
 package backend.order_spring_designpatterns.Controller;
 
 import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
+import backend.order_spring_designpatterns.DTO.Response.ProductResponseDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
 @RequestMapping("/products")
 // Classe responsável pelo controle de requisições e respostas da API para operações com produtos
@@ -23,29 +26,42 @@ public class ProductRestController {
 
     // Annotations Mapping permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
     @GetMapping
-    public ResponseEntity<Iterable<Product>> findAll(){
+    public ResponseEntity<List<ProductResponseDTO>> findAll(){
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
-        return ResponseEntity.ok(productService.findAll());
+        List<Product> products = productService.findAll();
+        List<ProductResponseDTO> productsResponse = products.stream().map(ProductResponseDTO::new).toList();
+
+        return ResponseEntity.ok(productsResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id){
-        return ResponseEntity.ok(productService.findById(id));
+    public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id){
+        Product product = productService.findById(id);
+        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+
+        return ResponseEntity.ok(productResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@RequestBody ProductRequestDTO productRequestDTODTO, @PathVariable Long id){
-        return ResponseEntity.ok(productService.update(productRequestDTODTO, id));
+    public ResponseEntity<ProductResponseDTO> update(@RequestBody ProductRequestDTO productRequestDTO,
+                                                     @PathVariable Long id){
+        Product product = productService.update(productRequestDTO, id);
+        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+
+        return ResponseEntity.ok(productResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> delete(@PathVariable Long id){
+    public ResponseEntity<ProductResponseDTO> delete(@PathVariable Long id){
         productService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
     }
 
     @PostMapping
-    public ResponseEntity<Product> insert(@RequestBody ProductRequestDTO productRequestDTODTO){
-        return ResponseEntity.ok(productService.insert(productRequestDTODTO));
+    public ResponseEntity<ProductResponseDTO> insert(@RequestBody ProductRequestDTO productRequestDTO){
+        Product product = productService.insert(productRequestDTO);
+        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+
+        return ResponseEntity.ok(productResponse);
     }
 }

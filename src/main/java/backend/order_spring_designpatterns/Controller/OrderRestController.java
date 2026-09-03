@@ -47,10 +47,11 @@ public class OrderRestController {
         Order orderUpdate = orderService.update(orderRequestDTO, id);
         OrderResponseDTO orderResponse = new OrderResponseDTO(orderUpdate);
 
+
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PutMapping("/{id}/payment")
+    @PutMapping("/{id}/paid")
     public ResponseEntity<OrderResponseDTO> updateOrderPaid(@PathVariable Long id){
         Order orderUpdate = orderService.updatePaid(id);
         OrderResponseDTO orderResponse = new OrderResponseDTO(orderUpdate);
@@ -59,7 +60,7 @@ public class OrderRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Order> delete(@PathVariable Long id){
+    public ResponseEntity<OrderResponseDTO> delete(@PathVariable Long id){
         orderService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
     }
