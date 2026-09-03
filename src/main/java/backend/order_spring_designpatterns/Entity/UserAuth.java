@@ -9,7 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
@@ -18,6 +21,8 @@ import java.util.UUID;
 @Table(name = "User_Auth")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 // Entidade UserAuth utilizada para autenticação de usuários para requisições aos endpoints
 public class UserAuth {
     @Id
