@@ -17,6 +17,7 @@ O projeto simula um sistema de gerenciamento de **Pedidos (Orders)** de uma loja
 *   Gerenciamento de Produtos (Products)
 *   Gerenciamento de Pedidos (Orders) contendo Itens de Pedido (Order Items)
 *   Processamento de Pagamentos (Payments)
+*   Autenticação e Autorização de Usuários com **JWT**
 
 <br>
 
@@ -35,8 +36,11 @@ Neste projeto, os seguintes padrões de projeto **(Design Patterns)** foram impl
     *   Clientes (`/clients`)
     *   Produtos (`/products`)
     *   Pedidos (`/orders`)
+*   **Autenticação e Autorização**:
+    *   Registro e Login (`/auth/register`, `/auth/login`)
+    *   Proteção de endpoints baseada em Roles (ex: apenas `ADMIN` pode modificar produtos).
 *   Documentação e testes da API integrados através do **Swagger/OpenAPI**.
-*   Banco de dados em memória, ideal para prototipagem rápida e armazenamento simples, sem configurações de máquina.
+*   Banco de dados (MySQL) em container (Docker).
 
 <br>
 
@@ -47,7 +51,10 @@ O projeto foi organizado utilizando uma arquitetura baseada em camadas (Layered 
 *   **Serviços (`Service`):** Regras de negócios principais da aplicação.
 *   **Repositórios (`Repository`):** Interfaces que abstraem o acesso aos dados utilizando Spring Data JPA.
 *   **Entidades (`Entity`):** Representação das tabelas no banco de dados.
+*   **Exceções (`Exceptions`):** Representação das exceções (erros) lançadas em tempo de execução.
+*   **Modelo (`Model`):** Modelo de entidade implementando regras e configurações específicas.
 *   **DTOs (`DTO`):** Transferência de dados segura e formatada entre as requisições e respostas (separando entrada/saída das entidades reais persistidas no banco).
+*   **Segurança (`configs/security`):** Filtro (Filter), gerador/validador de token JWT e configurações de autenticação/autorização com Spring Security.
 
 <br>
 
@@ -58,7 +65,10 @@ O projeto foi organizado utilizando uma arquitetura baseada em camadas (Layered 
     *   Spring Web MVC
     *   Spring Data JPA
     *   Spring Cloud OpenFeign
-*   **H2 Database** (Banco de dados em memória)
+    *   Spring Security
+*   **JWT (JSON Web Token)** para autenticação stateless (ou seja, cada solicitação é processada de modo independente, sem armazenamento de histórico de requisições)
+*   **MySQL** (Banco de dados)
+*   **Docker** (Gerenciamento de container)
 *   **Springdoc OpenAPI** (Swagger UI para documentação)
 *   **Gradle** (Ferramenta de automação de builds)
 
@@ -150,6 +160,51 @@ Cliente `client`:
 }
 ```
 
+Usuário `user_auth`:
+```json
+{
+  "userId": "uuid",
+  "username": "string",
+  "password": "encrypted_string",
+  "role": "ADMIN_OR_USER"
+}
+```
+
+<br>
+
+## 🔐 Autenticação (Login e Registro)
+
+O sistema utiliza o **Spring Security** com **JWT** para autenticação e autorização. Os endpoints da API exigem que as requisições possuam um token válido (com cabeçalho contendo padrão Bearer para autorização `Authorization: Bearer <token>`), exceto as rotas de criação (`auth/register`) e autenticação (login `auth/login`) de usuários.
+
+> Vale ressaltar que as ROLES (`ADMIN` e `USER`) definidas são somente para demonstração. Assim, os privilégios que as diferem consistem somente no registro, na atualização e na exclusão (`POST`, `PUT` e `DELETE`) de produtos (`products`), exclusivos aos usuários registrados como ADMIN.
+
+### 1. Registrar um Novo Usuário (POST `/auth/register`)
+Para acessar a API, primeiro registre-se, definindo o nível de acesso (`role`): `ADMIN` ou `USER`.
+```json
+{
+  "username": "admin",
+  "password": "123",
+  "role": "ADMIN"
+}
+```
+
+### 2. Efetuar Login (POST `/auth/login`)
+Com o usuário criado, envie as credenciais para obter o token JWT de acesso.
+```json
+{
+  "username": "admin",
+  "password": "123"
+}
+```
+**Resposta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR..."
+}
+```
+Após obter o token, utilize-o no cabeçalho (Header) das próximas requisições com o padrão `Bearer`:
+* `Authorization: Bearer <token>`
+
 <br>
 
 ## 📖 Exemplos de Uso da API
@@ -187,13 +242,22 @@ Exemplo de **Criação de Cliente (POST)** via JSON:
 ```json
 {
   "name": "Pedro Henrique",
-  "orderItems": "pedrohenrique@gmail.com"
+  "email": "pedrohenrique@gmail.com"
+}
+```
+
+Exemplo de **Criação de Usuário (POST)** via JSON:
+```json
+{
+  "username": "pedrinho",
+  "password": "pedro123",
+  "role": "ADMIN"
 }
 ```
 
 <br>
 
-## ⚙️ Passo a Passo para clonar e utilizar
+## ⚙️ Passo a passo para clonar e utilizar
 
 1. **Clone o repositório:**
    ```bash
@@ -201,9 +265,19 @@ Exemplo de **Criação de Cliente (POST)** via JSON:
    cd Order_Spring_DesignPatterns
    ```
 
-2. **Certifique-se de ter o Java 21 configurado** no seu ambiente.
+2. **Certifique-se de ter o Java 21 configurado e instalado** no seu ambiente.
 
-3. **Inicie o projeto através do Gradle Wrapper:**
+3. **Copie e altere as variáveis de ambiente (`.env`):**
+    ```bash
+    cp .env.example .env
+    ```
+   
+4. **Inicie o Docker para que o container seja configurado:**
+    ```bash
+   docker compose up -d
+    ```
+
+5. **Inicie o projeto através do Gradle Wrapper:**
     * No Windows:
       ```bash
       ./gradlew.bat bootRun
@@ -213,5 +287,5 @@ Exemplo de **Criação de Cliente (POST)** via JSON:
       ./gradlew bootRun
       ```
 
-4. **Acesso à API:**
+6. **Acesso à API:**
     * Swagger: `http://localhost:8080/swagger-ui.html`

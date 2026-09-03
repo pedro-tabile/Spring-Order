@@ -51,6 +51,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
+    // Atualiza o registro com pagamento realizado e status concluído.
     @PutMapping("/{id}/paid")
     public ResponseEntity<OrderResponseDTO> updateOrderPaid(@PathVariable Long id){
         Order orderUpdate = orderService.updatePaid(id);
