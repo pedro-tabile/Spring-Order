@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/* Classe que define regras de negócio para Order */
 @Service
 public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     @Autowired

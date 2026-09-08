@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/* Classe que define regras de negócio para Payment (componente do Order) */
 @Service
 public class PaymentService {
     @Autowired

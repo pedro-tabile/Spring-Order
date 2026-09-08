@@ -7,7 +7,7 @@ import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Exception.UsernameAlreadyInUseException;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Service.UserAuthService;
-import backend.order_spring_designpatterns.configs.security.TokenService;
+import backend.order_spring_designpatterns.Configs.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

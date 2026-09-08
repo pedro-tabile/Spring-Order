@@ -1,4 +1,4 @@
-package backend.order_spring_designpatterns.configs.security;
+package backend.order_spring_designpatterns.Configs.security;
 
 import backend.order_spring_designpatterns.Service.UserAuthService;
 import jakarta.servlet.FilterChain;

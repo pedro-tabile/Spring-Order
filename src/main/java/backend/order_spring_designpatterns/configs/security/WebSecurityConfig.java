@@ -1,4 +1,4 @@
-package backend.order_spring_designpatterns.configs.security;
+package backend.order_spring_designpatterns.Configs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
