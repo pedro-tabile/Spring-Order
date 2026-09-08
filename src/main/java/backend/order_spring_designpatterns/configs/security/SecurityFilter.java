@@ -1,7 +1,5 @@
 package backend.order_spring_designpatterns.configs.security;
 
-import backend.order_spring_designpatterns.Model.UserAuthModel;
-import backend.order_spring_designpatterns.Repository.UserAuthRepository;
 import backend.order_spring_designpatterns.Service.UserAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,10 +27,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         var token = this.recoverToken(request);
         if (token != null) {
             var subject = tokenService.validateToken(token);
-            System.out.println(subject);
             UserDetails userDetails = UserAuthService.loadUserByUsername(subject);
 
             // Atualização de contexto de autenticação com o token

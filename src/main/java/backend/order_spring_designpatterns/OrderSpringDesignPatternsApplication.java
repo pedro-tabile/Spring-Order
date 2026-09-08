@@ -2,8 +2,10 @@ package backend.order_spring_designpatterns;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients
 public class OrderSpringDesignPatternsApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
