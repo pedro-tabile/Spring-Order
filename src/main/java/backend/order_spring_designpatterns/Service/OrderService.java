@@ -65,7 +65,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
-        Payment payment = paymentService.insert(orderRequest.paymentDTO(), order);
+        Payment payment = paymentService.insert(orderRequest.payment(), order);
         order.setPayment(payment);
 
         orderRepository.save(order);
@@ -114,7 +114,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.paymentDTO());
+        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.payment());
 
         orderRepository.save(orderSaved);
         return orderSaved;

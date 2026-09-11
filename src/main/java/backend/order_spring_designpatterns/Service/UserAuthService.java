@@ -5,6 +5,7 @@ import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Repository.UserAuthRepository;
 import backend.order_spring_designpatterns.Exception.UsernameAlreadyInUseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,11 +15,8 @@ import org.springframework.stereotype.Service;
 // Classe que implementa service que carrega/localiza usuário a partir do username
 @Service
 public class UserAuthService implements UserDetailsService {
-    private final UserAuthRepository userAuthRepository;
-
-    public UserAuthService(UserAuthRepository userAuthRepository) {
-        this.userAuthRepository = userAuthRepository;
-    }
+    @Autowired
+    private UserAuthRepository userAuthRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
