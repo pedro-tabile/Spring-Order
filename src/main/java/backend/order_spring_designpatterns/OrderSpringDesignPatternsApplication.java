@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -8,9 +9,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class OrderSpringDesignPatternsApplication {
     public static void main(String[] args) {
+        // Configuração de carregamento de variáveis de ambiente do arquivo .env
+        Dotenv dotenv = Dotenv.configure().load();
+        // Definição de cada variável nas propriedades (properties) do sistema
+        dotenv.entries().forEach(e -> System.setProperty(e.getKey(), e.getValue()));
+
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
-        // Implementação de codificador de senha com função BCrypt
-        // System.out.println(new BCryptPasswordEncoder().encode("admin"));
     }
 
     // ------------------------------ Comentários adicionais: ------------------------------

@@ -1,5 +1,7 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.FromToRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
@@ -29,6 +31,9 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     private OrderItemService orderItemService;
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private MailerSendService sendPulseService;
 
     public List<Order> findAll(){
         return orderRepository.findAll();
@@ -64,6 +69,15 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         order.setPayment(payment);
 
         orderRepository.save(order);
+
+        // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
+        EmailRequestDTO emailData = new EmailRequestDTO(
+                new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail()),
+                "Pedido registrado!"
+        );
+
+        sendPulseService.sendEmail(emailData);
+
         return order;
     }
 
