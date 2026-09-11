@@ -9,13 +9,19 @@ public record EmailRequestDTO(
         String subject,
         String text
 ) {
+    private static final FromToRequestDTO fromEmail = new FromToRequestDTO(
+            "Teste_Orders_SMTP",
+            "MS_ojT0Od@test-68zxl27d3em4j905.mlsender.net"
+    );
 
-    public EmailRequestDTO(FromToRequestDTO to, String text){
+    private static final String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
+
+    public EmailRequestDTO(FromToRequestDTO to){
         this(
-                new FromToRequestDTO("Teste_Orders_SMTP", "MS_ojT0Od@test-68zxl27d3em4j905.mlsender.net"),
+                fromEmail,
                 List.of(to),
-                "Novo pedido registrado",
-                text
+                subjectMessage,
+                "text"
         );
     }
 }

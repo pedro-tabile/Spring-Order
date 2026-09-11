@@ -1,0 +1,58 @@
+<!--Página .html como template para exibição de informações via email-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+
+    <style>
+        html {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 20px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        li {
+            font-size: 17px;
+        }
+
+        footer {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Você realizou um novo pedido!</h1>
+
+    <p>Olá, <i>{{clientName}}!</i> </p>
+
+    <p>Informações do pedido:</p>
+
+    <ul>
+        <li><b>Código: </b>{{orderId}}</li>
+        <li><b>Status: </b>{{status}}</li>
+        <li><b>Data do pedido: </b>{{orderDate}}</li>
+        <li><b>Valor total: </b>R$ {{totalValue}}</li>
+        <li><b>Método de pagamento: </b>{{paymentMethod}}</li>
+    </ul>
+
+    <br><br>
+
+    <footer>
+        <address>
+            Projeto Spring Orders <br>
+            Realizado por <a href="mailto:tabilepedro1903@gmail.com" target="_blank">Pedro Henrique</a> <br>
+            Visite a página do <a href="https://www.linkedin.com/in/pedro-henrique-tabile-piovezani-468050349" target="_blank">LinkedIn</a>
+        </address>
+    </footer>
+</body>
+</html>

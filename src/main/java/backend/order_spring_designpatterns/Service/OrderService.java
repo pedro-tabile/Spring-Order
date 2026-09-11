@@ -33,7 +33,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     private PaymentService paymentService;
 
     @Autowired
-    private MailerSendService sendPulseService;
+    private MailerSendService mailerSendService;
 
     public List<Order> findAll(){
         return orderRepository.findAll();
@@ -72,11 +72,10 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
 
         // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
         EmailRequestDTO emailData = new EmailRequestDTO(
-                new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail()),
-                "Pedido registrado!"
+                new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail())
         );
 
-        sendPulseService.sendEmail(emailData);
+        mailerSendService.sendEmail(emailData);
 
         return order;
     }
