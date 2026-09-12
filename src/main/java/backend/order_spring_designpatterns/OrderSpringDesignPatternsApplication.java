@@ -17,7 +17,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: validações na inserção de pedido, validações nos produtos, security e openfeign no readme, estilização de email
+    //TODO: validações na inserção de pedido, validações nos produtos, security e openfeign no readme, api email, .env
 
     // ------------------------------ Comentários adicionais: ------------------------------
 

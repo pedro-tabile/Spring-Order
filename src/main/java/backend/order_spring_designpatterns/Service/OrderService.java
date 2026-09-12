@@ -4,6 +4,8 @@ import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.FromToRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -70,14 +72,30 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
 
         orderRepository.save(order);
 
-        // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
+        sendEmailByApi(order);
+        return order;
+    }
+
+    // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
+    public void sendEmailByApi(Order order){
+        FromToRequestDTO recipient = new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail());
+
         EmailRequestDTO emailData = new EmailRequestDTO(
-                new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail())
+                recipient,
+                new PersonalizationEmailRequestDTO(
+                        recipient.email(),
+                        new PersonalizationDataRequestDTO(
+                                recipient.name(),
+                                order.getId(),
+                                order.getStatus(),
+                                order.getCreationDate(),
+                                order.getTotalValue(),
+                                order.getPayment().getType()
+                        )
+                )
         );
 
         mailerSendService.sendEmail(emailData);
-
-        return order;
     }
 
     public Order update(OrderRequestDTO orderRequest, Long id){

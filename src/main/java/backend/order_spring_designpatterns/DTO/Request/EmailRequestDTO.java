@@ -7,21 +7,25 @@ public record EmailRequestDTO(
         FromToRequestDTO from,
         List<FromToRequestDTO> to,
         String subject,
-        String text
+        String templateId,
+        List<PersonalizationEmailRequestDTO> personalization
 ) {
     private static final FromToRequestDTO fromEmail = new FromToRequestDTO(
             "Teste_Orders_SMTP",
-            "MS_ojT0Od@test-68zxl27d3em4j905.mlsender.net"
+            "MS_ojT0Od@test-68zxl27d3em4j905.mlsender.net" //TODO env
     );
 
     private static final String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
 
-    public EmailRequestDTO(FromToRequestDTO to){
+    private static final String template = "pr9084znqjj4w63d"; //TODO env
+
+    public EmailRequestDTO(FromToRequestDTO to, PersonalizationEmailRequestDTO personalization) {
         this(
                 fromEmail,
                 List.of(to),
                 subjectMessage,
-                "text"
+                template,
+                List.of(personalization)
         );
     }
 }
