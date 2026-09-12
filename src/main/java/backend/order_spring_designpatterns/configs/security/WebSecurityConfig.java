@@ -1,4 +1,4 @@
-package backend.order_spring_designpatterns.configs.security;
+package backend.order_spring_designpatterns.Configs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+
 // Habilita configurações de segurança personalizadas
 @EnableWebSecurity
 // Classe com configurações de segurança (Spring Security) relacionadas à autenticação e acesso aos endpoints
@@ -31,21 +32,24 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // Define métodos/endpoints autorizados com base na hierarquia
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // Filtro executado antes do processamento de uma autenticação enviada
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                // Gerenciamento de sessão como stateless
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 /* Método de autenticação http basic - desnecessário devido ao endpoint de login e exposição do bean de
                 AuthenticationManager */
                 // .httpBasic(Customizer.withDefaults())
 
-                // Gerenciamento de sessão como stateless
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 

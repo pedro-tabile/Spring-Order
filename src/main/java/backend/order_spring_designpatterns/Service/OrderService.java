@@ -1,7 +1,11 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.FromToRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -10,6 +14,7 @@ import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/* Classe que define regras de negócio para Order */
 @Service
 public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     @Autowired
@@ -28,6 +34,9 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     private OrderItemService orderItemService;
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private MailerSendService mailerSendService;
 
     public List<Order> findAll(){
         return orderRepository.findAll();
@@ -59,11 +68,46 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
-        Payment payment = paymentService.insert(orderRequest.paymentDTO(), order);
+        Payment payment = paymentService.insert(orderRequest.payment(), order);
         order.setPayment(payment);
 
         orderRepository.save(order);
+
+        sendEmailByApi(order);
         return order;
+    }
+
+    @Value("${TEMPLATE_ID_HTML}")
+    private String templateId;
+
+    @Value("${ADDRESS_EMAIL}")
+    private String addressEmail;
+
+    // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
+    public void sendEmailByApi(Order order){
+        FromToRequestDTO sender = new FromToRequestDTO("Teste Order Spring", addressEmail);
+        FromToRequestDTO recipient = new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail());
+        String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
+
+        EmailRequestDTO emailData = new EmailRequestDTO(
+                recipient,
+                sender,
+                subjectMessage,
+                templateId,
+                new PersonalizationEmailRequestDTO(
+                        recipient.email(),
+                        new PersonalizationDataRequestDTO(
+                                recipient.name(),
+                                order.getId(),
+                                order.getStatus(),
+                                order.getCreationDate(),
+                                order.getTotalValue(),
+                                order.getPayment().getType()
+                        )
+                )
+        );
+
+        mailerSendService.sendEmail(emailData);
     }
 
     public Order update(OrderRequestDTO orderRequest, Long id){
@@ -99,7 +143,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.paymentDTO());
+        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.payment());
 
         orderRepository.save(orderSaved);
         return orderSaved;

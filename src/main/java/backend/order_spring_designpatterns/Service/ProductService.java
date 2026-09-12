@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/* Classe que define regras de negócio para Product */
 @Service
 public class ProductService implements CrudService<Product, Long, ProductRequestDTO> {
     @Autowired

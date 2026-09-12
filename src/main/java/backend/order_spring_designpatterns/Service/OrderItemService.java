@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+/* Classe que define regras de negócio para Order_Item (componente de Order) */
 @Service
 public class OrderItemService {
     @Autowired
