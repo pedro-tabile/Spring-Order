@@ -14,6 +14,7 @@ import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -76,12 +77,23 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         return order;
     }
 
+    @Value("${TEMPLATE_ID_HTML}")
+    private String templateId;
+
+    @Value("${ADDRESS_EMAIL}")
+    private String addressEmail;
+
     // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
     public void sendEmailByApi(Order order){
+        FromToRequestDTO sender = new FromToRequestDTO("Teste Order Spring", addressEmail);
         FromToRequestDTO recipient = new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail());
+        String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
 
         EmailRequestDTO emailData = new EmailRequestDTO(
                 recipient,
+                sender,
+                subjectMessage,
+                templateId,
                 new PersonalizationEmailRequestDTO(
                         recipient.email(),
                         new PersonalizationDataRequestDTO(
