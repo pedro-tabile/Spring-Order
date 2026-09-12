@@ -1,7 +1,7 @@
 <!--Página .html como template para exibição de informações via email-->
 
-<!--OBS.: Este template foi registrado/enviado via API pelo Postman (POST https://api.mailersend.com/v1/templates). Eles também podem ser criados 
-diretamente no MailerSend-->
+<!--OBS.: Este template foi registrado/enviado via API pelo Postman (POST https://api.mailersend.com/v1/templates e
+TEMPLATE_TOKEN). Eles também podem ser criados diretamente no MailerSend-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +44,7 @@ diretamente no MailerSend-->
         <li><b>Código: </b>{{orderId}}</li>
         <li><b>Status: </b>{{status}}</li>
         <li><b>Data do pedido: </b>{{orderDate}}</li>
-        <li><b>Valor total: </b>R$ {{totalValue}}</li>
+        <li><b>Valor total: </b>{{totalValue}}</li>
         <li><b>Método de pagamento: </b>{{paymentMethod}}</li>
     </ul>
 

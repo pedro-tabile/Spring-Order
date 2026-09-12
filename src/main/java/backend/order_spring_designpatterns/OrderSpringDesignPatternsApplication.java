@@ -17,8 +17,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: validações na inserção de pedido, validações nos produtos, security e openfeign no readme, api email, .env
-
+    //TODO: validações na inserção de pedido, validações nos produtos, security e openfeign no readme
     // ------------------------------ Comentários adicionais: ------------------------------
 
     /* O bean (objeto gerenciado pelo Spring) @Component e suas especializações (como @Repository, @Controller e

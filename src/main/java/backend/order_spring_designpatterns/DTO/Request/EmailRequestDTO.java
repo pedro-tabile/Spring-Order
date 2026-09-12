@@ -1,5 +1,7 @@
 package backend.order_spring_designpatterns.DTO.Request;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.List;
 
 // Record responsável por definir as informações padrão dos emails enviados
@@ -7,24 +9,28 @@ public record EmailRequestDTO(
         FromToRequestDTO from,
         List<FromToRequestDTO> to,
         String subject,
-        String templateId,
+        String template_id,
         List<PersonalizationEmailRequestDTO> personalization
 ) {
+    @Value("${ADDRESS_EMAIL}")
+    private static String addressEmail;
+
     private static final FromToRequestDTO fromEmail = new FromToRequestDTO(
-            "Teste_Orders_SMTP",
-            "MS_ojT0Od@test-68zxl27d3em4j905.mlsender.net" //TODO env
+            "Teste Orders SMTP",
+            addressEmail
     );
 
     private static final String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
 
-    private static final String template = "pr9084znqjj4w63d"; //TODO env
+    @Value("${TEMPLATE_ID_EMAIL}")
+    private static String templateId;
 
     public EmailRequestDTO(FromToRequestDTO to, PersonalizationEmailRequestDTO personalization) {
         this(
                 fromEmail,
                 List.of(to),
                 subjectMessage,
-                template,
+                templateId,
                 List.of(personalization)
         );
     }
