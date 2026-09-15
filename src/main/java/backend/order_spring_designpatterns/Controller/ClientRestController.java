@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.ClientRequestDTO;
 import backend.order_spring_designpatterns.DTO.Response.ClientResponseDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,7 +58,7 @@ public class ClientRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseDTO> insert(@RequestBody ClientRequestDTO clientRequestDTO){
+    public ResponseEntity<ClientResponseDTO> insert(@RequestBody @Valid ClientRequestDTO clientRequestDTO){
         Client client = clientService.insert(clientRequestDTO);
         ClientResponseDTO clientResponse = new ClientResponseDTO(client);
 
