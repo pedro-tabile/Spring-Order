@@ -2,6 +2,7 @@ package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Product;
+import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     }
 
     public Product findById(Long id){
-        return productRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
+        return productRepository.findById(id).orElseThrow(IdNotFound::new);
     }
 
     //TODO: atualizar infos necessárias com base nos campos da entidade

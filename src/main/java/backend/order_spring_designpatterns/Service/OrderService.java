@@ -10,6 +10,7 @@ import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Payment;
+import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
@@ -43,7 +44,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     }
 
     public Order findById(Long id){
-        return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
+        return orderRepository.findById(id).orElseThrow(IdNotFound::new);
     }
 
     public Order insert(OrderRequestDTO orderRequest){

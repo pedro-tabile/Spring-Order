@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    // Erro gerado caso o id informado não exista na tabela
+    @ExceptionHandler(IdNotFound.class)
+    public ResponseEntity handleIdException(IdNotFound ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     // Define a exibição de resposta HTTP para erros de validação, contendo o campo incorreto e a mensagem
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity handleValidationException(MethodArgumentNotValidException ex){

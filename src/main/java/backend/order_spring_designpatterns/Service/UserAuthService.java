@@ -28,7 +28,7 @@ public class UserAuthService implements UserDetailsService {
 
     public UserAuth save(@Valid UserAuthRegisterRequestDTO userAuthRegisterDTO) {
         if (userAuthRepository.findByUsername(userAuthRegisterDTO.username()).isPresent())
-            throw new UsernameAlreadyInUseException("Username já está em uso!");
+            throw new UsernameAlreadyInUseException();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(userAuthRegisterDTO.password());
 
