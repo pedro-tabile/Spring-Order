@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
+@RestController// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
 @RequestMapping("/products")
 // Classe responsável pelo controle de requisições e respostas da API para operações com produtos
 public class ProductRestController {

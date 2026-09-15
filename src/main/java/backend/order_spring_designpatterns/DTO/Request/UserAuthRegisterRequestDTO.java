@@ -13,7 +13,7 @@ public record UserAuthRegisterRequestDTO(
 
         @NotNull(message = "Senha inválida!")
         @NotBlank(message = "Senha inválida!")
-        @Size(min = 6, max = 30, message = "A senha deve ter entre 6 e 30 caracteres!")
+        @Size(min = 3, max = 30, message = "A senha deve ter entre 3 e 30 caracteres!")
         String password,
 
         RolesEnum role

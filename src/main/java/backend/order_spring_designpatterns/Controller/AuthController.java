@@ -4,7 +4,6 @@ import backend.order_spring_designpatterns.DTO.Request.UserAuthRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequestDTO;
 import backend.order_spring_designpatterns.DTO.Response.LoginResponseDTO;
 import backend.order_spring_designpatterns.Entity.UserAuth;
-import backend.order_spring_designpatterns.Exception.UsernameAlreadyInUseException;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Service.UserAuthService;
 import backend.order_spring_designpatterns.Configs.security.TokenService;
@@ -14,18 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -70,21 +62,5 @@ public class AuthController {
         userDetailsService.save(userAuthRegisterDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    // Define tratamento para possível exceção lançada
-    @ExceptionHandler(UsernameAlreadyInUseException.class)
-    public ResponseEntity handleUsernameException(UsernameAlreadyInUseException ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    // Define a exibição de resposta HTTP para erros de validação, contendo a mensagem e o campo incorreto
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationException(MethodArgumentNotValidException ex){
-        HashMap<String, String> errorsMessage = new HashMap<>();
-        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
-        errors.forEach(error -> errorsMessage.put(((FieldError) error).getField(), error.getDefaultMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
     }
 }
