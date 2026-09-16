@@ -35,7 +35,8 @@ public class OrderItemService {
 
         /* Uma vez que "order" corresponde ao objeto passado como parâmetro, sendo uma referência ao Order recebido de
         OrderService.insert(), o campo order_id da tabela OrderItem será preenchido pelo JPA com o id gerado para tal
-        Order durante sua criação. Isso ocorre porque houve declaração de relacionamente entre as entidades/campos */
+        Order durante sua criação. Isso ocorre porque houve declaração de relacionamente entre as entidades/campos
+        (expressa nos arquivos Entity) */
         orderItem.setOrder(order);
 
         orderItemRepository.save(orderItem);

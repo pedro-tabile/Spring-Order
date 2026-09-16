@@ -6,6 +6,7 @@ import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -36,6 +37,8 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     private OrderItemService orderItemService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private MailerSendService mailerSendService;
@@ -80,6 +83,11 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         order.setPayment(payment);
 
         orderRepository.save(order);
+
+        for (var item : order.getOrderItems()) {
+            BigDecimal newStock = item.getProduct().getStock().subtract(BigDecimal.valueOf(item.getAmount()));
+            productService.updateStock(newStock, item.getProduct().getId());
+        }
 
         sendEmailByApi(order);
         return order;
