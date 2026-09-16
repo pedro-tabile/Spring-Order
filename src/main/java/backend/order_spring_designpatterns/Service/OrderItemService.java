@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Product;
+import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class OrderItemService {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
+
+        if (productAmount.longValue() > product.getStock().longValue())
+            throw new StockLimitExceeded();
+
         orderItem.setAmount(productAmount);
         orderItem.setTotalPrice(totalPrice);
 

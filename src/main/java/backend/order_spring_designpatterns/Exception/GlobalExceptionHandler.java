@@ -35,4 +35,16 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
     }
+
+    // Erro gerado caso o serviço de envio de email do MailerSend seja interrompido devido a um email incorreto
+    @ExceptionHandler(MailerSendMailNotValid.class)
+    public ResponseEntity handleMailerSendEmailException(MailerSendMailNotValid ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    // Erro gerado caso a quantidade informada de um produto (em um pedido) seja maior que o estoque do mesmo
+    @ExceptionHandler(StockLimitExceeded.class)
+    public ResponseEntity handleStockLimitExceededException(StockLimitExceeded ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

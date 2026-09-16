@@ -21,7 +21,8 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     }
 
     public Product findById(Long id){
-        return productRepository.findById(id).orElseThrow(IdNotFound::new);
+        return productRepository.findById(id)
+                .orElseThrow(()->new IdNotFound("Produto", id));
     }
 
     //TODO: atualizar infos necessárias com base nos campos da entidade

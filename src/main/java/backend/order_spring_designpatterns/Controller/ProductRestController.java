@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.DTO.Response.ProductResponseDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,7 +59,7 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> insert(@RequestBody ProductRequestDTO productRequestDTO){
+    public ResponseEntity<ProductResponseDTO> insert(@RequestBody @Valid ProductRequestDTO productRequestDTO){
         Product product = productService.insert(productRequestDTO);
         ProductResponseDTO productResponse = new ProductResponseDTO(product);
 

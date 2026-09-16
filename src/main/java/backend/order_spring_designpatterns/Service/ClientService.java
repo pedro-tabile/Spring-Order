@@ -21,7 +21,7 @@ public class ClientService implements CrudService<Client, Long, ClientRequestDTO
     }
 
     public Client findById(Long id){
-        return clientRepository.findById(id).orElseThrow(IdNotFound::new);
+        return clientRepository.findById(id).orElseThrow(()->new IdNotFound("Cliente", id));
     }
 
     public Client insert(ClientRequestDTO clientDTO){

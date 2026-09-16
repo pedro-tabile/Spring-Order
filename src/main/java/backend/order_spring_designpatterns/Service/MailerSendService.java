@@ -2,6 +2,8 @@ package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.Client.MailerSendClient;
 import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
+import backend.order_spring_designpatterns.Exception.MailerSendMailNotValid;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,15 @@ public class MailerSendService {
     private String token;
 
     public void sendEmail(EmailRequestDTO emailRequestDTO) {
-        mailerSendClient.sendEmail(emailRequestDTO, "Bearer " + token);
+        try {
+            mailerSendClient.sendEmail(emailRequestDTO, "Bearer " + token);
+        } catch (FeignException ex) {
+            // 422 = Unprocessable Entity
+            if (ex.status() == 422) {
+                throw new MailerSendMailNotValid();
+            }
+
+            throw ex;
+        }
     }
 }
