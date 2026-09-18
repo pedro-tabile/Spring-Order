@@ -44,7 +44,8 @@ public class ClientRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> update(@RequestBody ClientRequestDTO clientRequestDTO, @PathVariable Long id){
+    public ResponseEntity<ClientResponseDTO> update(@RequestBody @Valid ClientRequestDTO clientRequestDTO,
+                                                    @PathVariable Long id){
         Client client = clientService.update(clientRequestDTO, id);
         ClientResponseDTO clientResponse = new ClientResponseDTO(client);
 

@@ -1,7 +1,9 @@
 package backend.order_spring_designpatterns.Exception;
 
+import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,13 +40,24 @@ public class GlobalExceptionHandler {
 
     // Erro gerado caso o serviço de envio de email do MailerSend seja interrompido devido a um email incorreto
     @ExceptionHandler(MailerSendMailNotValid.class)
-    public ResponseEntity handleMailerSendEmailException(MailerSendMailNotValid ex){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<SendEmailErrorResponseDTO> handleMailerSendEmailException(MailerSendMailNotValid ex){
+        SendEmailErrorResponseDTO responseDTO = new SendEmailErrorResponseDTO("O pedido foi criado!", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     // Erro gerado caso a quantidade informada de um produto (em um pedido) seja maior que o estoque do mesmo
     @ExceptionHandler(StockLimitExceeded.class)
     public ResponseEntity handleStockLimitExceededException(StockLimitExceeded ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    // Erro gerado em tentativa de login inválida
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity handleStockLimitExceededException(AuthenticationException ex){
+        HashMap<String, String> errorsMessage = new HashMap<>();
+        errorsMessage.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMessage);
     }
 }

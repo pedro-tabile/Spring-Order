@@ -6,7 +6,6 @@ import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequestDTO;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -16,6 +15,7 @@ import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -126,7 +126,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         mailerSendService.sendEmail(emailData);
     }
 
-    public Order update(OrderRequestDTO orderRequest, Long id){
+    public Order update(@Valid OrderRequestDTO orderRequest, Long id){
         Order orderSaved = findById(id);
 
         Client client = clientService.findById(orderRequest.clientId());
