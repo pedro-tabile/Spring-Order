@@ -3,6 +3,7 @@ package backend.order_spring_designpatterns.Exception;
 import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -12,26 +13,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Classe responsável por definir o tratamento global de exceções
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     // Define a exibição de resposta HTTP para solicitação de registro com username que já está em uso
     @ExceptionHandler(UsernameAlreadyInUseException.class)
-    public ResponseEntity handleUsernameException(UsernameAlreadyInUseException ex){
+    public ResponseEntity<String> handleUsernameException(UsernameAlreadyInUseException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     // Erro gerado caso o id informado não exista na tabela
     @ExceptionHandler(IdNotFound.class)
-    public ResponseEntity handleIdException(IdNotFound ex){
+    public ResponseEntity<String> handleIdException(IdNotFound ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     // Define a exibição de resposta HTTP para erros de validação, contendo o campo incorreto e a mensagem
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationException(MethodArgumentNotValidException ex){
-        HashMap<String, String> errorsMessage = new HashMap<>();
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){
+        Map<String, String> errorsMessage = new HashMap<>();
         List<ObjectError> errors = ex.getBindingResult().getAllErrors();
         errors.forEach(error -> errorsMessage.put(((FieldError) error).getField(), error.getDefaultMessage()));
 
@@ -48,16 +50,25 @@ public class GlobalExceptionHandler {
 
     // Erro gerado caso a quantidade informada de um produto (em um pedido) seja maior que o estoque do mesmo
     @ExceptionHandler(StockLimitExceeded.class)
-    public ResponseEntity handleStockLimitExceededException(StockLimitExceeded ex){
+    public ResponseEntity<String> handleStockLimitExceededException(StockLimitExceeded ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     // Erro gerado em tentativa de login inválida
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity handleStockLimitExceededException(AuthenticationException ex){
-        HashMap<String, String> errorsMessage = new HashMap<>();
+    public ResponseEntity<Map<String, String>> handleInvalidAutheticationException(AuthenticationException ex){
+        Map<String, String> errorsMessage = new HashMap<>();
         errorsMessage.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMessage);
+    }
+
+    // Erro gerado ao informar método de pagamento inválido (fora do enum)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handlePaymentMethodNotValidException(HttpMessageNotReadableException ex){
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("message", "Tipo de pagamento inválido! Opções: 'ESPECIE', 'DEBITO', 'CREDITO' ou 'PIX'");
+        System.out.println(ex.getCause());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 }

@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Entity;
 
+import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
 import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,9 +43,9 @@ public class Payment {
     private StatusPaymentEnum status;
 
     // Não permite campo vazio ou somente com espaços
-    @NotBlank
     @Column(nullable = false)
-    private String type;
+    @Enumerated(value = EnumType.STRING)
+    private PaymentMethodsEnum type;
 
     @Column(nullable = false)
     private OffsetDateTime paymentDate;
