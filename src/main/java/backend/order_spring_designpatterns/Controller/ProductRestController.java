@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
 import backend.order_spring_designpatterns.DTO.Response.ProductResponseDTO;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
+@RestController// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
 @RequestMapping("/products")
 // Classe responsável pelo controle de requisições e respostas da API para operações com produtos
 public class ProductRestController {
@@ -43,7 +44,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@RequestBody ProductRequestDTO productRequestDTO,
+    public ResponseEntity<ProductResponseDTO> update(@RequestBody @Valid ProductRequestDTO productRequestDTO,
                                                      @PathVariable Long id){
         Product product = productService.update(productRequestDTO, id);
         ProductResponseDTO productResponse = new ProductResponseDTO(product);
@@ -58,7 +59,7 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> insert(@RequestBody ProductRequestDTO productRequestDTO){
+    public ResponseEntity<ProductResponseDTO> insert(@RequestBody @Valid ProductRequestDTO productRequestDTO){
         Product product = productService.insert(productRequestDTO);
         ProductResponseDTO productResponse = new ProductResponseDTO(product);
 

@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponseDTO;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +68,7 @@ public class OrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> insert(@RequestBody OrderRequestDTO orderRequestDTO){
+    public ResponseEntity<OrderResponseDTO> insert(@RequestBody @Valid OrderRequestDTO orderRequestDTO){
         Order orderSave = orderService.insert(orderRequestDTO);
         OrderResponseDTO orderResponse = new OrderResponseDTO(orderSave);
 

@@ -7,7 +7,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// Configuração do Swagger para permitir Bearer Authentication
+// Configuração para o Swagger a fim de permitir Bearer Authentication
 @Configuration
 public class OpenAPIConfig {
     @Bean

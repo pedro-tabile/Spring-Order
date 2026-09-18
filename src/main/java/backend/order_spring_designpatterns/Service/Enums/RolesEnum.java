@@ -2,6 +2,7 @@ package backend.order_spring_designpatterns.Service.Enums;
 
 import lombok.Getter;
 
+// Opções para tipo de usuário
 @Getter
 public enum RolesEnum {
     USER("USER"),

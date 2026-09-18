@@ -5,6 +5,7 @@ import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Repository.UserAuthRepository;
 import backend.order_spring_designpatterns.Exception.UsernameAlreadyInUseException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,16 +26,17 @@ public class UserAuthService implements UserDetailsService {
          return UserAuthModel.fromEntity(userModel);
     }
 
-    public UserAuth save(UserAuthRegisterRequestDTO userAuthRegisterDTO) {
+    public UserAuth save(@Valid UserAuthRegisterRequestDTO userAuthRegisterDTO) {
         if (userAuthRepository.findByUsername(userAuthRegisterDTO.username()).isPresent())
-            throw new UsernameAlreadyInUseException("Username is already in use!");
+            throw new UsernameAlreadyInUseException();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(userAuthRegisterDTO.password());
 
         UserAuth userAuth = new UserAuth();
         userAuth.setUsername(userAuthRegisterDTO.username());
         userAuth.setPassword(encryptedPassword);
-        userAuth.setRole(userAuthRegisterDTO.role());
+        if (userAuthRegisterDTO.role() != null)
+            userAuth.setRole(userAuthRegisterDTO.role());
 
         return userAuthRepository.save(userAuth);
     }

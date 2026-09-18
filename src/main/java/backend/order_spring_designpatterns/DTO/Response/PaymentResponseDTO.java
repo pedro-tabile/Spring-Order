@@ -1,6 +1,7 @@
 package backend.order_spring_designpatterns.DTO.Response;
 
 import backend.order_spring_designpatterns.Entity.Payment;
+import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
 import backend.order_spring_designpatterns.Service.Enums.StatusPaymentEnum;
 
 import java.time.OffsetDateTime;
@@ -10,7 +11,7 @@ específicas para resposta à requisição */
 public record PaymentResponseDTO(Long id,
                                  Long orderId,
                                  StatusPaymentEnum status,
-                                 String type,
+                                 PaymentMethodsEnum type,
                                  OffsetDateTime paymentDate) {
 
     public PaymentResponseDTO(Payment payment){

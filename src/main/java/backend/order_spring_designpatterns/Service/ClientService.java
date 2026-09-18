@@ -2,6 +2,7 @@ package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.DTO.Request.ClientRequestDTO;
 import backend.order_spring_designpatterns.Entity.Client;
+import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Repository.ClientRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ClientService implements CrudService<Client, Long, ClientRequestDTO
     }
 
     public Client findById(Long id){
-        return clientRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
+        return clientRepository.findById(id).orElseThrow(()->new IdNotFound("Cliente", id));
     }
 
     public Client insert(ClientRequestDTO clientDTO){

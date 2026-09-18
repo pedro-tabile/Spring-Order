@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.DTO.Request;
 
+import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 
 import java.math.BigDecimal;
@@ -19,14 +20,14 @@ public record PersonalizationDataRequestDTO(
 ) {
 
     public PersonalizationDataRequestDTO(String clientName, Long orderId, StatusOrderEnum status,
-                                         OffsetDateTime orderDate, BigDecimal totalValue, String paymentMethod) {
+                                         OffsetDateTime orderDate, BigDecimal totalValue, PaymentMethodsEnum paymentMethod) {
         this(
                 clientName,
                 orderId.toString(),
                 status == StatusOrderEnum.PENDING ? "Pendente" : "Concluído",
                 orderDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")),
                 NumberFormat.getCurrencyInstance().format(totalValue.setScale(2, RoundingMode.HALF_UP)),
-                paymentMethod
+                paymentMethod.getMethodName()
         );
     }
 }

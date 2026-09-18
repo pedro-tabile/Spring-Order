@@ -10,9 +10,12 @@ import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Payment;
+import backend.order_spring_designpatterns.Exception.IdNotFound;
+import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,8 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     private OrderItemService orderItemService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private MailerSendService mailerSendService;
@@ -43,7 +48,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
     }
 
     public Order findById(Long id){
-        return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Nenhum valor encontrado"));
+        return orderRepository.findById(id).orElseThrow(()->new IdNotFound("Pedido", id));
     }
 
     public Order insert(OrderRequestDTO orderRequest){
@@ -60,8 +65,14 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
 
         List<OrderItem> orderItems = new ArrayList<>();
         for (var item : orderRequest.orderItems()){
-            OrderItem orderItem = orderItemService.insert(item, order);
-            orderItems.add(orderItem);
+            // Tratamento de erro para exclusão do registro inicial do pedido da tabela
+            try {
+                OrderItem orderItem = orderItemService.insert(item, order);
+                orderItems.add(orderItem);
+            } catch (StockLimitExceeded ex) {
+                delete(order.getId());
+                throw ex;
+            }
         }
         order.setOrderItems(orderItems);
         order.setTotalValue(order.getOrderItems().stream()
@@ -72,6 +83,11 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         order.setPayment(payment);
 
         orderRepository.save(order);
+
+        for (var item : order.getOrderItems()) {
+            BigDecimal newStock = item.getProduct().getStock().subtract(BigDecimal.valueOf(item.getAmount()));
+            productService.updateStock(newStock, item.getProduct().getId());
+        }
 
         sendEmailByApi(order);
         return order;
@@ -110,7 +126,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         mailerSendService.sendEmail(emailData);
     }
 
-    public Order update(OrderRequestDTO orderRequest, Long id){
+    public Order update(@Valid OrderRequestDTO orderRequest, Long id){
         Order orderSaved = findById(id);
 
         Client client = clientService.findById(orderRequest.clientId());
