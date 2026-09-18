@@ -1,6 +1,7 @@
 package backend.order_spring_designpatterns.Exception;
 
 import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponseDTO;
+import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,7 +11,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tools.jackson.databind.exc.InvalidFormatException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +66,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMessage);
     }
 
-    // Erro gerado ao informar método de pagamento inválido (fora do enum)
+    // Erro gerado ao informar método de pagamento inválido (opção escolhida não incluída no enum)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handlePaymentMethodNotValidException(HttpMessageNotReadableException ex){
         Map<String, String> errorMessage = new HashMap<>();
-        errorMessage.put("message", "Tipo de pagamento inválido! Opções: 'ESPECIE', 'DEBITO', 'CREDITO' ou 'PIX'");
-        System.out.println(ex.getCause());
+
+        if (ex.getCause() instanceof InvalidFormatException invalidFormat
+                && invalidFormat.getTargetType() == PaymentMethodsEnum.class) {
+            errorMessage.put("message", "Tipo de pagamento inválido! Opções: 'ESPECIE', 'DEBITO', 'CREDITO' ou 'PIX'");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+
+        errorMessage.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 }
