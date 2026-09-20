@@ -24,7 +24,7 @@ public class Product {
 
     // Não permite campo vazio ou somente com espaços
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)

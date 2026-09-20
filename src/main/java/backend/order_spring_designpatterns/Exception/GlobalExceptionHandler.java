@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tools.jackson.databind.exc.InvalidFormatException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +75,21 @@ public class GlobalExceptionHandler {
         if (ex.getCause() instanceof InvalidFormatException invalidFormat
                 && invalidFormat.getTargetType() == PaymentMethodsEnum.class) {
             errorMessage.put("message", "Tipo de pagamento inválido! Opções: 'ESPECIE', 'DEBITO', 'CREDITO' ou 'PIX'");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+
+        errorMessage.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    // Erro gerado durante tentaiva de cadastro de produto com um nome já existente
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleNameAlreadyInUseException(SQLIntegrityConstraintViolationException ex){
+        Map<String, String> errorMessage = new HashMap<>();
+
+        if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
+                && ex.getMessage().contains("product.name_UNIQUE")) {
+            errorMessage.put("message", "Este nome já está em uso em outro produto!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
