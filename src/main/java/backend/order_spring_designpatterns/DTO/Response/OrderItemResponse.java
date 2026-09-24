@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 
 /* Record responsável por definir o transporte de dados de OrderItem, delimitando informações específicas para resposta
 à requisição */
-public record OrderItemResponseDTO(Long id, Product product, Long orderId, Integer amount, BigDecimal totalPrice) {
-    public OrderItemResponseDTO(OrderItem orderItem){
+public record OrderItemResponse(Long id, Product product, Long orderId, Integer amount, BigDecimal totalPrice) {
+    public OrderItemResponse(OrderItem orderItem){
         this(
                 orderItem.getId(),
                 orderItem.getProduct(),

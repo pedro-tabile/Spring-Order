@@ -1,7 +1,7 @@
 package backend.order_spring_designpatterns.Controller;
 
-import backend.order_spring_designpatterns.DTO.Request.ClientRequestDTO;
-import backend.order_spring_designpatterns.DTO.Response.ClientResponseDTO;
+import backend.order_spring_designpatterns.DTO.Request.ClientRequest;
+import backend.order_spring_designpatterns.DTO.Response.ClientResponse;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Service.ClientService;
 import jakarta.validation.Valid;
@@ -27,41 +27,41 @@ public class ClientRestController {
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
     @GetMapping
-    public ResponseEntity<List<ClientResponseDTO>> findAll(){
+    public ResponseEntity<List<ClientResponse>> findAll(){
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
         List<Client> clients = clientService.findAll();
-        List<ClientResponseDTO> clientsResponse = clients.stream().map(ClientResponseDTO::new).toList();
+        List<ClientResponse> clientsResponse = clients.stream().map(ClientResponse::new).toList();
 
         return ResponseEntity.ok(clientsResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> findById(@PathVariable Long id){
+    public ResponseEntity<ClientResponse> findById(@PathVariable Long id){
         Client client = clientService.findById(id);
-        ClientResponseDTO clientResponse = new ClientResponseDTO(client);
+        ClientResponse clientResponse = new ClientResponse(client);
 
         return ResponseEntity.ok(clientResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> update(@RequestBody @Valid ClientRequestDTO clientRequestDTO,
-                                                    @PathVariable Long id){
+    public ResponseEntity<ClientResponse> update(@RequestBody @Valid ClientRequest clientRequestDTO,
+                                                 @PathVariable Long id){
         Client client = clientService.update(clientRequestDTO, id);
-        ClientResponseDTO clientResponse = new ClientResponseDTO(client);
+        ClientResponse clientResponse = new ClientResponse(client);
 
         return ResponseEntity.ok(clientResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> delete(@PathVariable Long id){
+    public ResponseEntity<ClientResponse> delete(@PathVariable Long id){
         clientService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseDTO> insert(@RequestBody @Valid ClientRequestDTO clientRequestDTO){
+    public ResponseEntity<ClientResponse> insert(@RequestBody @Valid ClientRequest clientRequestDTO){
         Client client = clientService.insert(clientRequestDTO);
-        ClientResponseDTO clientResponse = new ClientResponseDTO(client);
+        ClientResponse clientResponse = new ClientResponse(client);
 
         return ResponseEntity.ok(clientResponse);
     }

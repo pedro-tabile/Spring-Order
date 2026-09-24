@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 // Record responsável por definir o transporte de dados da requisição ao ProductService, delimitando informações específicas
-public record ProductRequestDTO(
+public record ProductRequest(
         @NotBlank(message = "Nome do produto inválido!")
         String name,
 

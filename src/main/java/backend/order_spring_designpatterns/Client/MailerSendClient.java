@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Client;
 
-import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.EmailRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 // Interface que representa um Client para consumo da api externa - a implementação é realizada pelo Spring
 public interface MailerSendClient {
     @PostMapping(value = "v1/email")
-    ResponseEntity<Void> sendEmail(@RequestBody EmailRequestDTO email, @RequestHeader("Authorization") String token);
+    ResponseEntity<Void> sendEmail(@RequestBody EmailRequest email, @RequestHeader("Authorization") String token);
 }

@@ -8,13 +8,13 @@ import java.time.OffsetDateTime;
 
 /* Record responsável por definir o transporte de dados do PaymentService ao controller do Order, delimitando informações
 específicas para resposta à requisição */
-public record PaymentResponseDTO(Long id,
-                                 Long orderId,
-                                 StatusPaymentEnum status,
-                                 PaymentMethodsEnum type,
-                                 OffsetDateTime paymentDate) {
+public record PaymentResponse(Long id,
+                              Long orderId,
+                              StatusPaymentEnum status,
+                              PaymentMethodsEnum type,
+                              OffsetDateTime paymentDate) {
 
-    public PaymentResponseDTO(Payment payment){
+    public PaymentResponse(Payment payment){
         this(
                 payment.getId(),
                 payment.getOrder().getId(),

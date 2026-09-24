@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequest;
 import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Repository.UserAuthRepository;
@@ -26,7 +26,7 @@ public class UserAuthService implements UserDetailsService {
          return UserAuthModel.fromEntity(userModel);
     }
 
-    public UserAuth save(@Valid UserAuthRegisterRequestDTO userAuthRegisterDTO) {
+    public UserAuth save(@Valid UserAuthRegisterRequest userAuthRegisterDTO) {
         if (userAuthRepository.findByUsername(userAuthRegisterDTO.username()).isPresent())
             throw new UsernameAlreadyInUseException();
 

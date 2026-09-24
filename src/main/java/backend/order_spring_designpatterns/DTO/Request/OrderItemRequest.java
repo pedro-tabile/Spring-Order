@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 // Record responsável por definir o transporte de dados da requisição ao OrderItemService, delimitando informações específicas
-public record OrderItemRequestDTO(
+public record OrderItemRequest(
         @NotNull(message = "O Id do produto não pode ser nulo!")
         Long productId,
 

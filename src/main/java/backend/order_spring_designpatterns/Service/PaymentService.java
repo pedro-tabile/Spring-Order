@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.Request.PaymentRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.PaymentRequest;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.Payment;
 import backend.order_spring_designpatterns.Repository.PaymentRepository;
@@ -17,7 +17,7 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public Payment insert(PaymentRequestDTO paymentRequestDTO, Order order) {
+    public Payment insert(PaymentRequest paymentRequestDTO, Order order) {
         Payment payment = new Payment();
 
         /* Uma vez que "order" corresponde ao objeto passado como parâmetro, sendo uma referência ao Order recebido de
@@ -40,7 +40,7 @@ public class PaymentService {
         return paymentRepository.findAll();
     }
 
-    public void updateById(Long id, PaymentRequestDTO paymentRequest){
+    public void updateById(Long id, PaymentRequest paymentRequest){
         Payment payment = findById(id);
         payment.setType(paymentRequest.type());
         paymentRepository.save(payment);

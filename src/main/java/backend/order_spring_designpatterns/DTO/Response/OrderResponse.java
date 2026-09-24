@@ -10,23 +10,23 @@ import java.util.List;
 
 /* Record responsável por definir o transporte de dados do OrderService ao controller do Order, delimitando informações
 específicas para resposta à requisição */
-public record OrderResponseDTO(Long orderId,
-                               Client client,
-                               PaymentResponseDTO payment,
-                               BigDecimal totalValue,
-                               StatusOrderEnum status,
-                               OffsetDateTime creationDate,
-                               List<OrderItemResponseDTO> orderItems) {
+public record OrderResponse(Long orderId,
+                            Client client,
+                            PaymentResponse payment,
+                            BigDecimal totalValue,
+                            StatusOrderEnum status,
+                            OffsetDateTime creationDate,
+                            List<OrderItemResponse> orderItems) {
 
-    public OrderResponseDTO(Order order){
+    public OrderResponse(Order order){
          this(
                  order.getId(),
                  order.getClient(),
-                 new PaymentResponseDTO(order.getPayment()),
+                 new PaymentResponse(order.getPayment()),
                  order.getTotalValue(),
                  order.getStatus(),
                  order.getCreationDate(),
-                 order.getOrderItems().stream().map(OrderItemResponseDTO::new).toList()
+                 order.getOrderItems().stream().map(OrderItemResponse::new).toList()
          );
     }
 }

@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Exception;
 
-import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponseDTO;
+import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponse;
 import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    // Erro gerado caso o nome do produto informado não exista na tabela
+    @ExceptionHandler(ProductNotFoundByName.class)
+    public ResponseEntity<String> handleProductNameException(ProductNotFoundByName ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     // Define a exibição de resposta HTTP para erros de validação, contendo o campo incorreto e a mensagem
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){
@@ -46,8 +51,8 @@ public class GlobalExceptionHandler {
 
     // Erro gerado caso o serviço de envio de email do MailerSend seja interrompido devido a um email incorreto
     @ExceptionHandler(MailerSendMailNotValid.class)
-    public ResponseEntity<SendEmailErrorResponseDTO> handleMailerSendEmailException(MailerSendMailNotValid ex){
-        SendEmailErrorResponseDTO responseDTO = new SendEmailErrorResponseDTO("O pedido foi criado!", ex.getMessage());
+    public ResponseEntity<SendEmailErrorResponse> handleMailerSendEmailException(MailerSendMailNotValid ex){
+        SendEmailErrorResponse responseDTO = new SendEmailErrorResponse("O pedido foi criado!", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

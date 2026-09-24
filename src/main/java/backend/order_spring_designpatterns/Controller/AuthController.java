@@ -1,8 +1,8 @@
 package backend.order_spring_designpatterns.Controller;
 
-import backend.order_spring_designpatterns.DTO.Request.UserAuthRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequestDTO;
-import backend.order_spring_designpatterns.DTO.Response.LoginResponseDTO;
+import backend.order_spring_designpatterns.DTO.Request.UserAuthRequest;
+import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequest;
+import backend.order_spring_designpatterns.DTO.Response.LoginResponse;
 import backend.order_spring_designpatterns.Entity.UserAuth;
 import backend.order_spring_designpatterns.Model.UserAuthModel;
 import backend.order_spring_designpatterns.Service.UserAuthService;
@@ -35,7 +35,7 @@ public class AuthController {
 
     // Endpoint personalizado para camada/tratamento de login, implementando um gerenciador de autenticação
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid UserAuthRequestDTO dataAuth){
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid UserAuthRequest dataAuth){
         // Representa login e senha do usuário
         var usernamePassword = new UsernamePasswordAuthenticationToken(dataAuth.username(),dataAuth.password());
         // Tentativa de autenticação com base nas informações passadas
@@ -52,13 +52,13 @@ public class AuthController {
                 )
         );
 
-        LoginResponseDTO loginResponse = new LoginResponseDTO(token);
+        LoginResponse loginResponse = new LoginResponse(token);
 
         return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserAuthRegisterRequestDTO userAuthRegisterDTO){
+    public ResponseEntity register(@RequestBody @Valid UserAuthRegisterRequest userAuthRegisterDTO){
         userDetailsService.save(userAuthRegisterDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

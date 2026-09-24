@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /* Record responsável por definir o transporte de dados de novo registro de usuário, delimitando informações específicas */
-public record UserAuthRegisterRequestDTO(
+public record UserAuthRegisterRequest(
         @NotBlank(message = "Username inválido!")
         String username,
 

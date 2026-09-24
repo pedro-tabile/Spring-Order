@@ -1,7 +1,7 @@
 package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.Client.MailerSendClient;
-import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.EmailRequest;
 import backend.order_spring_designpatterns.Exception.MailerSendMailNotValid;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class MailerSendService {
     @Value("${MAILERSEND_SMTP_TOKEN}")
     private String token;
 
-    public void sendEmail(EmailRequestDTO emailRequestDTO) {
+    public void sendEmail(EmailRequest emailRequestDTO) {
         try {
             mailerSendClient.sendEmail(emailRequestDTO, "Bearer " + token);
         } catch (FeignException ex) {

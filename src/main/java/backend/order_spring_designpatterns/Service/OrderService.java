@@ -1,11 +1,11 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.Request.EmailRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.FromToRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.OrderRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequestDTO;
-import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.EmailRequest;
+import backend.order_spring_designpatterns.DTO.Request.FromToRequest;
+import backend.order_spring_designpatterns.DTO.Request.OrderItemRequest;
+import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequest;
+import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequest;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
@@ -28,7 +28,7 @@ import java.util.List;
 
 /* Classe que define regras de negócio para Order */
 @Service
-public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
+public class OrderService implements CrudService<Order, Long, OrderRequest> {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -51,7 +51,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         return orderRepository.findById(id).orElseThrow(()->new IdNotFound("Pedido", id));
     }
 
-    public Order insert(OrderRequestDTO orderRequest){
+    public Order insert(OrderRequest orderRequest){
         /* Primeira parte da inserção responsável pelo armazenamento de informações not null para geração de id, de
         forma a permitir a inserção de valores OrderItem com a referência a este order criado. */
         Client client = clientService.findById(orderRequest.clientId());
@@ -101,18 +101,18 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
 
     // Processo de criação e envio de body para POST na rota destinada ao serviço de email no client da SendPulse
     public void sendEmailByApi(Order order){
-        FromToRequestDTO sender = new FromToRequestDTO("Teste Order Spring", addressEmail);
-        FromToRequestDTO recipient = new FromToRequestDTO(order.getClient().getName(), order.getClient().getEmail());
+        FromToRequest sender = new FromToRequest("Teste Order Spring", addressEmail);
+        FromToRequest recipient = new FromToRequest(order.getClient().getName(), order.getClient().getEmail());
         String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
 
-        EmailRequestDTO emailData = new EmailRequestDTO(
+        EmailRequest emailData = new EmailRequest(
                 recipient,
                 sender,
                 subjectMessage,
                 templateId,
-                new PersonalizationEmailRequestDTO(
+                new PersonalizationEmailRequest(
                         recipient.email(),
-                        new PersonalizationDataRequestDTO(
+                        new PersonalizationDataRequest(
                                 recipient.name(),
                                 order.getId(),
                                 order.getStatus(),
@@ -126,13 +126,13 @@ public class OrderService implements CrudService<Order, Long, OrderRequestDTO> {
         mailerSendService.sendEmail(emailData);
     }
 
-    public Order update(@Valid OrderRequestDTO orderRequest, Long id){
+    public Order update(@Valid OrderRequest orderRequest, Long id){
         Order orderSaved = findById(id);
 
         Client client = clientService.findById(orderRequest.clientId());
         orderSaved.setClient(client);
 
-        for (OrderItemRequestDTO itemRequest : orderRequest.orderItems()){
+        for (OrderItemRequest itemRequest : orderRequest.orderItems()){
             OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.productId(), orderSaved.getId());
 
             if (orderItem != null){
