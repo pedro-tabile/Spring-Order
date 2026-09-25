@@ -30,7 +30,7 @@ public class OrderRestController {
     private ChatClientService genAiService;
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
-    @GetMapping
+    @GetMapping("/listAll")
     public ResponseEntity<List<OrderResponse>> findAll(){
         List<Order> orders = orderService.findAll();
         List<OrderResponse> ordersResponse = orders.stream().map(OrderResponse::new).toList();
@@ -47,7 +47,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<OrderResponse> update(@RequestBody OrderRequest orderRequestDTO, @PathVariable Long id){
         Order orderUpdate = orderService.update(orderRequestDTO, id);
         OrderResponse orderResponse = new OrderResponse(orderUpdate);
@@ -64,7 +64,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<OrderResponse> delete(@PathVariable Long id){
         orderService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
@@ -78,7 +78,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @GetMapping("/ai/orderJson/{text}")
+    @GetMapping("/ai/orderJson")
     public ResponseEntity<String> getOrderJsonWithAi(@RequestParam String text){
         String json = genAiService.generateResponse(text);
 

@@ -31,10 +31,15 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     @Tool(
             name = "get-product-by-name",
             description = """
-                    Busca as informações de um único produto pelo nome. Use somente para fazer uma única consulta para cada
-                    produto informado. 
+                    Busca as informações de um único produto pelo nome ou retorna um produto com valores null caso não 
+                    seja encontrado. Use somente para fazer uma única consulta para cada produto informado. 
                     """
     )
+    public Product findByNameTool(String name){
+        return productRepository.findByName(name)
+                .orElse(new Product(Long.getLong("0"), null, null, null));
+    }
+
     public Product findByName(String name){
         return productRepository.findByName(name)
                 .orElseThrow(()->new ProductNotFoundByName(name));

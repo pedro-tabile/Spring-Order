@@ -5,7 +5,6 @@ import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Repository.ClientRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
-import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +20,6 @@ public class ClientService implements CrudService<Client, Long, ClientRequest> {
         return clientRepository.findAll();
     }
 
-    @Tool(
-            name = "get-client-by-id",
-            description = "Verifica se um cliente existe pelo id. Use somente uma vez para o único código do cliente informado"
-    )
     public Client findById(Long id){
         return clientRepository.findById(id).orElseThrow(()->new IdNotFound("Cliente", id));
     }

@@ -26,7 +26,7 @@ public class ClientRestController {
     private ClientService clientService;
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
-    @GetMapping
+    @GetMapping("/listAll")
     public ResponseEntity<List<ClientResponse>> findAll(){
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
         List<Client> clients = clientService.findAll();
@@ -43,7 +43,7 @@ public class ClientRestController {
         return ResponseEntity.ok(clientResponse);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<ClientResponse> update(@RequestBody @Valid ClientRequest clientRequestDTO,
                                                  @PathVariable Long id){
         Client client = clientService.update(clientRequestDTO, id);
@@ -52,7 +52,7 @@ public class ClientRestController {
         return ResponseEntity.ok(clientResponse);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<ClientResponse> delete(@PathVariable Long id){
         clientService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo

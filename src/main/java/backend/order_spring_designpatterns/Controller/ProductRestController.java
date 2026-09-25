@@ -26,7 +26,7 @@ public class ProductRestController {
     private ProductService productService;
 
     // Annotations Mapping permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
-    @GetMapping
+    @GetMapping("/listAll")
     public ResponseEntity<List<ProductResponse>> findAll(){
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
         List<Product> products = productService.findAll();
@@ -51,7 +51,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<ProductResponse> update(@RequestBody @Valid ProductRequest productRequestDTO,
                                                   @PathVariable Long id){
         Product product = productService.update(productRequestDTO, id);
@@ -60,7 +60,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<ProductResponse> delete(@PathVariable Long id){
         productService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
