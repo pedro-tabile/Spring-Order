@@ -3,6 +3,7 @@ package backend.order_spring_designpatterns.Controller;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
 import backend.order_spring_designpatterns.Entity.Order;
+import backend.order_spring_designpatterns.Service.ChatClientService;
 import backend.order_spring_designpatterns.Service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,6 +26,8 @@ import java.util.List;
 public class OrderRestController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ChatClientService genAiService;
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
     @GetMapping
@@ -47,7 +51,6 @@ public class OrderRestController {
     public ResponseEntity<OrderResponse> update(@RequestBody OrderRequest orderRequestDTO, @PathVariable Long id){
         Order orderUpdate = orderService.update(orderRequestDTO, id);
         OrderResponse orderResponse = new OrderResponse(orderUpdate);
-
 
         return ResponseEntity.ok(orderResponse);
     }
@@ -73,5 +76,12 @@ public class OrderRestController {
         OrderResponse orderResponse = new OrderResponse(orderSave);
 
         return ResponseEntity.ok(orderResponse);
+    }
+
+    @GetMapping("/ai/orderJson/{text}")
+    public ResponseEntity<String> getOrderJsonWithAi(@RequestParam String text){
+        String json = genAiService.generateResponse(text);
+
+        return ResponseEntity.ok().body(json);
     }
 }

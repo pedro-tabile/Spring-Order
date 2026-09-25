@@ -35,7 +35,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productsResponse);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ProductResponse> findById(@PathVariable Long id){
         Product product = productService.findById(id);
         ProductResponse productResponse = new ProductResponse(product);
@@ -43,7 +43,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<ProductResponse> findByName(@PathVariable String name){
         Product product = productService.findByName(name);
         ProductResponse productResponse = new ProductResponse(product);

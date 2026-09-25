@@ -6,6 +6,7 @@ import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Exception.ProductNotFoundByName;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,13 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
                 .orElseThrow(()->new IdNotFound("Produto", id));
     }
 
+    @Tool(
+            name = "get-product-by-name",
+            description = """
+                    Busca as informações de um único produto pelo nome. Use somente para fazer uma única consulta para cada
+                    produto informado. 
+                    """
+    )
     public Product findByName(String name){
         return productRepository.findByName(name)
                 .orElseThrow(()->new ProductNotFoundByName(name));

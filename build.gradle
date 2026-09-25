@@ -27,6 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:4.6.0'
     implementation 'io.github.cdimascio:dotenv-java:3.2.0'
+    implementation platform("org.springframework.ai:spring-ai-bom:2.0.0")
+    implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
 
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'com.mysql:mysql-connector-j'
