@@ -16,7 +16,7 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
     // Valor (variável de ambiente) de chave secreta
-    @Value(value = "${api.security.token.secret}")
+    @Value(value = "${JWT_SECURITY_KEY}")
     private String secret;
 
     // Geração de token JWT

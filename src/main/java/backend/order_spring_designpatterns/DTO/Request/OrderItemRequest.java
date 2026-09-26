@@ -3,7 +3,8 @@ package backend.order_spring_designpatterns.DTO.Request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-// Record responsável por definir o transporte de dados da requisição ao OrderItemService, delimitando informações específicas
+/* Record responsável por definir o transporte de dados da requisição ao OrderItemService, delimitando informações
+específicas */
 public record OrderItemRequest(
         @NotNull(message = "O Id do produto não pode ser nulo!")
         Long productId,

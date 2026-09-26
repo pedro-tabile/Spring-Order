@@ -17,7 +17,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: security (também RBAC) e openfeign no readme, STT, logs, readme2 (IA), erro auth, auth put/del
+    //TODO: security (também RBAC) e openfeign no readme, readme2 (IA), STT, logs, erro auth, auth put/del
     // ------------------------------ Comentários adicionais: ------------------------------
 
     /* O bean (objeto gerenciado pelo Spring) @Component e suas especializações (como @Repository, @Controller e

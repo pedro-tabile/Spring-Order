@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// Classe que implementa service que carrega/localiza usuário a partir do username
+/* Classe que implementa service que carrega/localiza usuário a partir do username */
 @Service
 public class UserAuthService implements UserDetailsService {
     @Autowired

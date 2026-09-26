@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-// Classe responsável por definir o transporte de dados da requisição ao OrderService, delimitando informações específicas
+/* Classe responsável por definir o transporte de dados da requisição ao OrderService, delimitando informações
+específicas */
 public record OrderRequest(
         @NotNull(message = "O Id do cliente não pode ser nulo!")
         Long clientId,

@@ -22,6 +22,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
+/* Classe responsável pelo controle de requisições e respostas da API para operações de autenticação e registro de
+usuários com permissões*/
 public class AuthRestController {
     // Gerenciador de autenticação
     @Autowired

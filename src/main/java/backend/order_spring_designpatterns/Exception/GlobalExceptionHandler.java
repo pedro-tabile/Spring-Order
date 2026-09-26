@@ -107,7 +107,7 @@ public class GlobalExceptionHandler {
 
         if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
                 && ex.getMessage().contains("product.name_UNIQUE")) {
-            errorMessage.put("message", "Este nome já está em uso em outro produto!");
+            errorMessage.put("message", "Este produto já foi registrado!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
