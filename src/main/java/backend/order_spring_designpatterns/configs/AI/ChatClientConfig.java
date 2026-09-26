@@ -15,7 +15,8 @@ public class ChatClientConfig {
             junto à quantidade adquirida; e método de pagamento. Com base nessas informações você deve usar a ferramenta 
             get-product-by-name para fazer a busca do id de cada produto pelo nome uma única vez.
             
-            Assim, você deve usar essas informações para montar o JSON de retorno que deve conter exatamente: 
+            Assim, você deve usar essas informações para montar o JSON de retorno que deve conter exatamente a estrutura 
+            abaixo, conforme classe (OrderResponseAi) passada na chamada como padrão de retorno: 
             {   
                 "clientId": <id do cliente informado - tipo Long>,
                 "orderItems": [
@@ -24,19 +25,28 @@ public class ChatClientConfig {
                         "amount": <quantidade do produto adquirida - tipo Integer>
                     }
                 ],
-                "payment": <método de pagamento informado - tipo Enum ESPECIE, DEBITO, CREDITO ou PIX>
+                "payment": {
+                    "type:" <método de pagamento informado - tipo Enum ESPECIE, DEBITO, CREDITO ou PIX>
+                },
+                "message": <mensagem>
             }
             
             - Substitua o que estiver entre chaves pelas informações recebidas, de modo a preservar os tipos definidos;
             - Não faça chamadas adicionais à ferramenta get-product-by-name quando um produto já tiver ou não sido encontrado;
-            - Caso o id do cliente ou o método de pagamento não seja informado retorne o seguinte json, substituindo as 
-            chaves pelo campo ausente: {"message":"Elemento não informado: <id do cliente ou método de pagamento>"};
-            - Caso nenhum produto tenha sido informado retorne o seguinte json: {"message":"Nenhum produto informado"};
-            - Caso um produto tenha sido informado, mas sem a quantiade, retorne o seguinte json, substituindo as chaves
-            pelo nome do produto: {"message":"Quantidade não informada: <nome do produto>"};
+            - Caso clientId, orderItems e payment tenham sido preenchidos/informados defina message como <order definido>;
+            - Caso o id do cliente ou o método de pagamento não seja informado retorne os campos como null e o seguinte 
+            no message, substituindo as chaves pelo campo ausente: {"message":"Elemento não informado: <id do cliente ou 
+            método de pagamento>"};
+            - Caso nenhum produto tenha sido informado retorne os campos como null e o seguinte no message: {"message":
+            "Nenhum produto informado"};
+            - Caso um produto tenha sido informado, mas sem a quantiade, retorne os campos como null e o seguinte no 
+            message, substituindo as chaves pelo nome do produto: {"message":"Quantidade não informada: <nome do produto>"};
             - Caso algum produto não seja encontrado pela ferramenta ele será retornado com os seus campos null
-            e id 0; portanto, não faça mais chamadas e retorne um JSON no seguinte formato, substituindo as chaves pelo 
-            nome do produto não encontrado: {"message":"Elemento não encontrado: <nome do produto não encontrado>"}.
+            e id 0; portanto, não faça mais chamadas e retorne os campos null e o seguinte no message, substituindo as 
+            chaves pelo nome do produto não encontrado: {"message":"Elemento não encontrado: <nome do produto não encontrado>"};
+            - Caso o método de pagamento informado não seja uma das opções DINHEIRO, DEBITO, CREDITO ou PIX, retorne os 
+            campos como null e o seguinte no message, substituindo as chaves pelo método informado: {"message":" Método 
+            de pagamento inválido: <método informado>"}.
             """;
 
     @Bean

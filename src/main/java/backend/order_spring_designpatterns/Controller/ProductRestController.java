@@ -51,7 +51,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> update(@RequestBody @Valid ProductRequest productRequestDTO,
                                                   @PathVariable Long id){
         Product product = productService.update(productRequestDTO, id);
@@ -60,7 +60,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<ProductResponse> delete(@PathVariable Long id){
         productService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo

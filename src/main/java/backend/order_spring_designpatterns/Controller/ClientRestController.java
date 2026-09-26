@@ -43,7 +43,7 @@ public class ClientRestController {
         return ResponseEntity.ok(clientResponse);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ClientResponse> update(@RequestBody @Valid ClientRequest clientRequestDTO,
                                                  @PathVariable Long id){
         Client client = clientService.update(clientRequestDTO, id);
@@ -52,7 +52,7 @@ public class ClientRestController {
         return ResponseEntity.ok(clientResponse);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<ClientResponse> delete(@PathVariable Long id){
         clientService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo

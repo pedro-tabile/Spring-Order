@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 // Habilita configurações de segurança personalizadas
 @EnableWebSecurity
 // Classe com configurações de segurança (Spring Security) relacionadas à autenticação e acesso aos endpoints
-public class git WebSecurityConfig {
+public class WebSecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 

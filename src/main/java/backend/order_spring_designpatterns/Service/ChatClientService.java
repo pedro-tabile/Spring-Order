@@ -1,5 +1,8 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
+import backend.order_spring_designpatterns.DTO.Response.OrderResponseAi;
+import backend.order_spring_designpatterns.Exception.AiInvalidDataEntered;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,16 @@ public class ChatClientService {
         this.chatClient = chatClient;
     }
 
-    public String generateResponse(String prompt){
-        return this.chatClient.prompt().user(prompt).call().content();
+    public OrderRequest generateResponse(String prompt){
+        OrderResponseAi jsonResponse = this.chatClient.prompt().user(prompt).call().entity(OrderResponseAi.class);
+
+        if (jsonResponse.orderItems() == null || jsonResponse.clientId() == null || jsonResponse.payment() == null)
+            throw new AiInvalidDataEntered(jsonResponse.message());
+
+        return new OrderRequest(
+                jsonResponse.clientId(),
+                jsonResponse.orderItems(),
+                jsonResponse.payment()
+        );
     }
 }

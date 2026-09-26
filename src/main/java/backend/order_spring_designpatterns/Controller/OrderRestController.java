@@ -2,11 +2,13 @@ package backend.order_spring_designpatterns.Controller;
 
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
+import backend.order_spring_designpatterns.DTO.Response.OrderResponseAi;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Service.ChatClientService;
 import backend.order_spring_designpatterns.Service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
 @RequestMapping("/orders")
@@ -47,7 +51,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<OrderResponse> update(@RequestBody OrderRequest orderRequestDTO, @PathVariable Long id){
         Order orderUpdate = orderService.update(orderRequestDTO, id);
         OrderResponse orderResponse = new OrderResponse(orderUpdate);
@@ -64,7 +68,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<OrderResponse> delete(@PathVariable Long id){
         orderService.delete(id);
         return ResponseEntity.ok().build(); // Retorna resposta sem corpo
@@ -79,9 +83,8 @@ public class OrderRestController {
     }
 
     @GetMapping("/ai/orderJson")
-    public ResponseEntity<String> getOrderJsonWithAi(@RequestParam String text){
-        String json = genAiService.generateResponse(text);
-
-        return ResponseEntity.ok().body(json);
+    public ResponseEntity<OrderRequest> getOrderJsonWithAi(@RequestParam String text){
+        OrderRequest jsonResponse = genAiService.generateResponse(text);
+        return ResponseEntity.ok().body(jsonResponse);
     }
 }
