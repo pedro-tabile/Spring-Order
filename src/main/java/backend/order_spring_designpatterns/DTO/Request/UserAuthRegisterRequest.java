@@ -1,6 +1,7 @@
 package backend.order_spring_designpatterns.DTO.Request;
 
 import backend.order_spring_designpatterns.Service.Enums.RolesEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -13,6 +14,7 @@ public record UserAuthRegisterRequest(
         @Size(min = 3, max = 30, message = "A senha deve ter entre 3 e 30 caracteres!")
         String password,
 
+        @Schema(example = "MANAGER/STOCKER/CASHIER/CUSTOMER")
         RolesEnum role
 ) {
 }

@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthRestController {
     // Gerenciador de autenticação
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -31,10 +31,10 @@ public class AuthController {
     private TokenService tokenService;
 
     @Autowired
-    private UserAuthService userDetailsService;
+    private UserAuthService userAuthService;
 
     // Endpoint personalizado para camada/tratamento de login, implementando um gerenciador de autenticação
-    @PostMapping("/login")
+    @PostMapping("/login-token")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid UserAuthRequest dataAuth){
         // Representa login e senha do usuário
         var usernamePassword = new UsernamePasswordAuthenticationToken(dataAuth.username(),dataAuth.password());
@@ -59,7 +59,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid UserAuthRegisterRequest userAuthRegisterDTO){
-        userDetailsService.save(userAuthRegisterDTO);
+        userAuthService.save(userAuthRegisterDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -7,9 +7,7 @@ import lombok.Getter;
 public enum RolesEnum {
     MANAGER("MANAGER"),
     STOCKER("STOCKER"),
-    CHASIER("CASHIER"),
-    USER("USER"),
-    ADMIN("ADMIN"),
+    CASHIER("CASHIER"),
     CUSTOMER("CUSTOMER");
 
     private String role;

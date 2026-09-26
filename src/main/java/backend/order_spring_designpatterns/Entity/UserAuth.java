@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.UUID;
 
@@ -37,5 +36,5 @@ public class UserAuth {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private RolesEnum role = RolesEnum.USER;
+    private RolesEnum role = RolesEnum.MANAGER;
 }

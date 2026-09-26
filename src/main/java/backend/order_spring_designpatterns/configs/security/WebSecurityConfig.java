@@ -33,11 +33,25 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("STOCKER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("STOCKER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("STOCKER", "MANAGER")
+
+                        .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/orders/ai/orderJson").hasAnyRole("CASHIER", "MANAGER")
+
+                        /* No caso do endpoint clients, considera-se que um customer somente pode adicionar, alterar e
+                        excluir suas próprias informações no mundo real. */
+                        .requestMatchers(HttpMethod.POST, "/clients/**").hasAnyRole("CASHIER", "CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/clients/**").hasAnyRole("CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasAnyRole("CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("CASHIER", "MANAGER")
+
                         .anyRequest().authenticated()
                 )
                 // Filtro executado antes do processamento de uma autenticação enviada

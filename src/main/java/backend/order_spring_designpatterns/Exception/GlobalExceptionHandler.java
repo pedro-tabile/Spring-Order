@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -112,6 +113,15 @@ public class GlobalExceptionHandler {
 
         errorMessage.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    // Erro capturado caso username implícito no Bearer token seja inválido
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUsernameNotFoundBearerException(UsernameNotFoundException ex){
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("message", "Username inválido! Tente novo login/token!");
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
     }
 
     // Erro capturado caso algum dado não é informado ou é informado incorretamente à IA para definição do json de Order.
