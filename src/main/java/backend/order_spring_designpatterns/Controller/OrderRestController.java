@@ -69,9 +69,9 @@ public class OrderRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<OrderResponse> delete(@PathVariable Long id){
+    public ResponseEntity delete(@PathVariable Long id){
         orderService.delete(id);
-        return ResponseEntity.ok().build(); // Retorna resposta sem corpo
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna resposta sem corpo
     }
 
     @PostMapping
@@ -82,7 +82,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @GetMapping("/ai/orderJson")
+    @GetMapping("/ai/text/orderJson")
     public ResponseEntity<OrderRequest> getOrderJsonWithAi(@RequestParam String text){
         OrderRequest jsonResponse = genAiService.generateResponse(text);
         return ResponseEntity.ok().body(jsonResponse);

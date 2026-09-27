@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/v3/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/auth/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("STOCKER", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("STOCKER", "MANAGER")

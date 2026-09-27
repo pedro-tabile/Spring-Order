@@ -67,6 +67,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    // Erro capturado caso a senha informada para o usuário a ser deletado esteja incorreta
+    @ExceptionHandler(InvalidPassword.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPasswordToDeleteUserAuthException(InvalidPassword ex){
+        Map<String, String> errorsMessage = new HashMap<>();
+        errorsMessage.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
+    }
+
     // Erro capturado caso a quantidade informada de um produto (em um pedido) seja maior que o estoque do mesmo
     @ExceptionHandler(StockLimitExceeded.class)
     public ResponseEntity<Map<String, String>> handleStockLimitExceededException(StockLimitExceeded ex){
@@ -119,7 +128,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUsernameNotFoundBearerException(UsernameNotFoundException ex){
         Map<String, String> errorMessage = new HashMap<>();
-        errorMessage.put("message", "Username inválido! Tente novo login/token!");
+        errorMessage.put("message", "Username inválido!");
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
     }
