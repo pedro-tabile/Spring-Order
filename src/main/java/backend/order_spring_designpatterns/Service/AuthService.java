@@ -13,11 +13,12 @@ import java.util.UUID;
 
 @Service
 /* Classe que define as regras para autenticação do usuário */
-/* A autenticação não pode ser realizada no UserAuthService porque haveria uma dependência circular: o UserAuthService
-implementa UserDetailsService, sendo usado pelo fluxo de autenticação com AuthenticationManager para buscar os dados
-pelo username; por sua vez, o processo de login também utiliza o AuthenticationManager. Desse modo, caso permanecessem
+/* A autenticação não pode ser realizada no UserAuthService porque haveria uma dependência circular: o processo de
+login (antes no UserAuthService) utiliza o AuthenticationManager que, por sua vez, precisa de uma classe que implemente
+UserDetailsService para o mecanismo de autenticação, e essa classe é o UserAuthService. Desse modo, caso permanecessem
 no mesmo lugar, o UserAuthService dependeria do AuthenticationManager, enquanto o AuthenticationManager dependeria do
-UserAuthService durante o processo de autenticação. Portanto, detinou-se a essa classe o serviço de login. */
+UserAuthService/UserDetailsService durante o processo de autenticação. Portanto, destinou-se a essa classe o serviço de
+login. */
 public class AuthService {
     // Gerenciador de autenticação
     @Autowired

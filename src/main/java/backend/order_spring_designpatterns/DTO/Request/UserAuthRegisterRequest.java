@@ -14,7 +14,6 @@ public record UserAuthRegisterRequest(
         @Size(min = 3, max = 30, message = "A senha deve ter entre 3 e 30 caracteres!")
         String password,
 
-        @Schema(example = "MANAGER/STOCKER/CASHIER/CUSTOMER")
         RolesEnum role
 ) {
 }

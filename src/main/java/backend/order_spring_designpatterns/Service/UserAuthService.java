@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.Request.UpdateUserAuthRequest;
 import backend.order_spring_designpatterns.DTO.Request.UserAuthRegisterRequest;
 import backend.order_spring_designpatterns.DTO.Request.UserAuthRequest;
 import backend.order_spring_designpatterns.Entity.UserAuth;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /* Classe que implementa service que define identificação de usuário a partir do username. Também define outras
 operações CRUD */
 @Service
@@ -29,7 +32,7 @@ public class UserAuthService implements UserDetailsService {
         return UserAuthModel.fromEntity(userAuth);
     }
 
-    public UserAuth save(UserAuthRegisterRequest userAuthRegisterDTO) {
+    public UserAuth register(UserAuthRegisterRequest userAuthRegisterDTO) {
         if (userAuthRepository.findByUsername(userAuthRegisterDTO.username()).isPresent())
             throw new UsernameAlreadyInUseException();
 
@@ -45,14 +48,37 @@ public class UserAuthService implements UserDetailsService {
     }
 
     public void delete(UserAuthRequest userAuthRequest) throws UsernameNotFoundException{
-        UserAuth userAuth = userAuthRepository.findByUsername(userAuthRequest.username())
-                .orElseThrow(() -> new UsernameNotFoundException(userAuthRequest.username()));
+        UserDetails userAuth = loadUserByUsername(userAuthRequest.username());
+        UserAuthModel userAuthModel = (UserAuthModel) userAuth;
 
         if (!BCrypt.checkpw(userAuthRequest.password(), userAuth.getPassword()))
             throw new InvalidPassword();
 
-        userAuthRepository.delete(userAuth);
+        userAuthRepository.deleteById(UUID.fromString(userAuthModel.getUserId()));
+    }
+
+    public UserAuth update(UpdateUserAuthRequest updateUserAuthRequest){
+        UserDetails currentUser = loadUserByUsername(updateUserAuthRequest.oldUsername());
+        UserAuthModel userAuthModel = (UserAuthModel) currentUser;
+
+        if (!BCrypt.checkpw(updateUserAuthRequest.oldPassword(), userAuthModel.getPassword()))
+            throw new InvalidPassword();
+
+        UserAuth newDataUser = new UserAuth();
+        newDataUser.setUserId(UUID.fromString(userAuthModel.getUserId()));
+        newDataUser.setUsername(updateUserAuthRequest.newUsername());
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(updateUserAuthRequest.newPassword());
+        newDataUser.setPassword(encryptedPassword);
+
+        if (updateUserAuthRequest.newRole() != null)
+            newDataUser.setRole(updateUserAuthRequest.newRole());
+        else
+            newDataUser.setRole(userAuthModel.getRole());
+
+        return userAuthRepository.save(newDataUser);
     }
 }
 
-// Separação de serviços de validação de login e geração de token no endpoint /api/auth; Criação de service exclusivo para login (AuthService); Status 204 para deletes;
+// exception enum
+//Alteração de método delete para deleteById; Criação de endpoint de UserAuth para método Put; Criação de UserAuthResponse para put e post; Captura de exceção lançada por role (enum) inválida

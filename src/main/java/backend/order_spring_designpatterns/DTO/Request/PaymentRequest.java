@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 específicas */
 public record PaymentRequest(
         @NotNull(message = "Tipo de pagamento inválido! Opções: 'ESPECIE', 'DEBITO', 'CREDITO' ou 'PIX'")
-        @Schema(example = "ESPECIE/DEBITO/CREDITO/PIX")
         PaymentMethodsEnum type
 ){
 }

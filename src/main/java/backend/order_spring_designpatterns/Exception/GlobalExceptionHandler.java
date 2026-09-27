@@ -2,6 +2,7 @@ package backend.order_spring_designpatterns.Exception;
 
 import backend.order_spring_designpatterns.DTO.Response.SendEmailErrorResponse;
 import backend.order_spring_designpatterns.Service.Enums.PaymentMethodsEnum;
+import backend.order_spring_designpatterns.Service.Enums.RolesEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -94,10 +95,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMessage);
     }
 
-    // Erro capturado ao informar método de pagamento inválido (opção escolhida não incluída no enum)
+    // Erro capturado ao informar método de pagamento ou role de usuário inválida (opção escolhida não incluída no enum)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handlePaymentMethodNotValidException(HttpMessageNotReadableException ex){
+    public ResponseEntity<Map<String, String>> handlePaymentMethodOrUserRoleNotValidException(HttpMessageNotReadableException ex){
         Map<String, String> errorMessage = new HashMap<>();
+
+        if (ex.getCause() instanceof InvalidFormatException invalidFormat &&
+                invalidFormat.getTargetType() == RolesEnum.class){
+            errorMessage.put("message", "Role inválida! Opções: 'MANAGER', 'STOCKER', 'CASHIER' ou 'CUSTOMER'");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
 
         if (ex.getCause() instanceof InvalidFormatException invalidFormat
                 && invalidFormat.getTargetType() == PaymentMethodsEnum.class) {
@@ -130,7 +137,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errorMessage = new HashMap<>();
         errorMessage.put("message", "Username inválido!");
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
     // Erro capturado caso algum dado não é informado ou é informado incorretamente à IA para definição do json de Order.
