@@ -45,8 +45,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/orders/ai/**").hasAnyRole("CASHIER", "MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/orders/ai/**").hasAnyRole("CASHIER", "MANAGER")
+
+                        .requestMatchers(HttpMethod.GET, "/ai/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/ai/**").hasAnyRole("CASHIER", "MANAGER")
 
                         /* No caso do endpoint clients, considera-se que um customer somente pode adicionar, alterar e
                         excluir suas próprias informações no mundo real. */

@@ -31,5 +31,3 @@ public class SpeechToTextService {
         return transcriptionResponse.getResult().getOutput();
     }
 }
-
-// Definição de propriedades de IA de Transcription; Criação de service para transcription; Criação de endpoint para serviço de transcription (SST); Validação/Exceção para tipo de arquivo diferente de audio
