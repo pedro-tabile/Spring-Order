@@ -79,6 +79,3 @@ public class UserAuthService implements UserDetailsService {
         return userAuthRepository.save(newDataUser);
     }
 }
-
-// exception enum
-//Alteração de método delete para deleteById; Criação de endpoint de UserAuth para método Put; Criação de UserAuthResponse para put e post; Captura de exceção lançada por role (enum) inválida

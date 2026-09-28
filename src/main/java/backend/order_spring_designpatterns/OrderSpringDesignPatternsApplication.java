@@ -17,7 +17,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: auth put, rsponseAuth, STT, logs
+    //TODO: STT para LLM, LLM save order, logs
 
     //TODO: security (também RBAC) readme, openfeign no readme, readme2 (IA)
     // ------------------------------ Comentários adicionais: ------------------------------

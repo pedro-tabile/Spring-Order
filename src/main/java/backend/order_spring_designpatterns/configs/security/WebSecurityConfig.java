@@ -1,8 +1,5 @@
 package backend.order_spring_designpatterns.Configs.security;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,19 +11,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
 @Configuration
-
 // Habilita configurações de segurança personalizadas
 @EnableWebSecurity
 // Classe com configurações de segurança (Spring Security) relacionadas à autenticação e acesso aos endpoints
@@ -55,7 +45,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/orders/ai/orderJson").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/orders/ai/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/orders/ai/**").hasAnyRole("CASHIER", "MANAGER")
 
                         /* No caso do endpoint clients, considera-se que um customer somente pode adicionar, alterar e
                         excluir suas próprias informações no mundo real. */

@@ -16,6 +16,13 @@ public class ChatClientService {
     }
 
     public OrderRequest generateResponse(String prompt){
+        /* As Propriedades também podem ser configuradas aqui:
+        GoogleGenAiChatOptions.Builder chatOptions = GoogleGenAiChatOptions.builder()
+                ...
+                .model("gemini-3.6-flash")
+                .temperature(.6);
+         */
+
         OrderResponseAi jsonResponse = this.chatClient.prompt().user(prompt).call().entity(OrderResponseAi.class);
 
         if (jsonResponse.orderItems() == null || jsonResponse.clientId() == null || jsonResponse.payment() == null)

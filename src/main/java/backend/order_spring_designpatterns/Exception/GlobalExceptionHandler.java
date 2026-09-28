@@ -148,4 +148,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
     }
+
+    // Erro capturado caso o arquivo de áudio enviado seja inválido
+    @ExceptionHandler(InvalidAudioFile.class)
+    public ResponseEntity<Map<String, String>> handleInvalidAudioFileException(InvalidAudioFile ex){
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }

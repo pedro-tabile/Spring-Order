@@ -29,6 +29,7 @@ dependencies {
     implementation 'io.github.cdimascio:dotenv-java:3.2.0'
     implementation platform("org.springframework.ai:spring-ai-bom:2.0.0")
     implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
+    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'com.mysql:mysql-connector-j'

@@ -4,11 +4,14 @@ import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponseAi;
 import backend.order_spring_designpatterns.Entity.Order;
+import backend.order_spring_designpatterns.Exception.InvalidAudioFile;
 import backend.order_spring_designpatterns.Service.ChatClientService;
 import backend.order_spring_designpatterns.Service.OrderService;
+import backend.order_spring_designpatterns.Service.SpeechToTextService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController()// Usa-se para indicar o retorno de dados no corpo da resposta HTTP/web
@@ -32,6 +37,8 @@ public class OrderRestController {
     private OrderService orderService;
     @Autowired
     private ChatClientService genAiService;
+    @Autowired
+    private SpeechToTextService speechToTextService;
 
     // Annotations Mapping (mapeiam para métodos Java) permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
     @GetMapping("/listAll")
@@ -82,9 +89,23 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @GetMapping("/ai/text/orderJson")
+    @GetMapping("/ai/text-to-orderJson")
     public ResponseEntity<OrderRequest> getOrderJsonWithAi(@RequestParam String text){
         OrderRequest jsonResponse = genAiService.generateResponse(text);
         return ResponseEntity.ok().body(jsonResponse);
+    }
+
+    @PostMapping(value = "/ai/audio-to-text", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> getOrderPrompt(@RequestParam("audio") MultipartFile file){
+        if (file.isEmpty() || file.getContentType() == null || !file.getContentType().startsWith("audio/")){
+            throw new InvalidAudioFile();
+        }
+
+        Map<String, String> response = new HashMap<>();
+
+        String transcriptionPrompt = speechToTextService.transcription(file);
+        response.put("transcription", transcriptionPrompt);
+
+        return ResponseEntity.ok().body(response);
     }
 }
