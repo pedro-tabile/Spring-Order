@@ -48,9 +48,10 @@ public class ChatClientService {
                 jsonResponse.orderItems(),
                 jsonResponse.payment()
         );
+
     }
 
-    public OrderResponse saveOrder(String prompt){
+    public OrderResponse saveOrderFromPrompt(String prompt){
         /* Outra abordagem seria delegando totalmente o processo de geração de json e inserção à IA:
         ModelOrderResponseAi orderSavedJson = this.chatClient
                 .prompt()

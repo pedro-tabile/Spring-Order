@@ -59,9 +59,17 @@ public class AiRestController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping(value = "/save-order")
+    @PostMapping(value = "/save-order-from-prompt")
     public ResponseEntity<OrderResponse> saveOrder(@RequestParam String text){
-        OrderResponse orderSavedJsonResponse = genAiService.saveOrder(text);
+        OrderResponse orderSavedJsonResponse = genAiService.saveOrderFromPrompt(text);
         return ResponseEntity.ok().body(orderSavedJsonResponse);
+    }
+
+    @PostMapping(value = "/save-order-from-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<OrderResponse> saveOrder(@RequestParam("audio") MultipartFile file){
+        String transcription = speechToTextService.transcription(file);
+        OrderResponse jsonResponse = genAiService.saveOrderFromPrompt(transcription);
+
+        return ResponseEntity.ok().body(jsonResponse);
     }
 }
