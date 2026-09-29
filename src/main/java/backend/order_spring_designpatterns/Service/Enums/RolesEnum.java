@@ -5,8 +5,10 @@ import lombok.Getter;
 // Opções para tipo de usuário
 @Getter
 public enum RolesEnum {
-    USER("USER"),
-    ADMIN("ADMIN");
+    MANAGER("MANAGER"),
+    STOCKER("STOCKER"),
+    CASHIER("CASHIER"),
+    CUSTOMER("CUSTOMER");
 
     private String role;
 

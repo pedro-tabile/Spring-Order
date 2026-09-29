@@ -3,16 +3,16 @@ package backend.order_spring_designpatterns.DTO.Request;
 import java.util.List;
 
 // Record responsável por definir as informações padrão dos emails enviados
-public record EmailRequestDTO(
-        FromToRequestDTO from,
-        List<FromToRequestDTO> to,
+public record EmailRequest(
+        FromToRequest from,
+        List<FromToRequest> to,
         String subject,
         String template_id,
-        List<PersonalizationEmailRequestDTO> personalization
+        List<PersonalizationEmailRequest> personalization
 ) {
 
-    public EmailRequestDTO(FromToRequestDTO to, FromToRequestDTO sender, String subjectMessage,
-                           String templateId, PersonalizationEmailRequestDTO personalization) {
+    public EmailRequest(FromToRequest to, FromToRequest sender, String subjectMessage,
+                        String templateId, PersonalizationEmailRequest personalization) {
         this(
                 sender,
                 List.of(to),

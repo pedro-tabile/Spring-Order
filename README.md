@@ -288,4 +288,4 @@ Exemplo de **Criação de Usuário (POST)** via JSON:
       ```
 
 6. **Acesso à API:**
-    * Swagger: `http://localhost:8080/swagger-ui.html`
+    * Swagger: `http://localhost:8080/swagger-ui/index.html`

@@ -1,11 +1,12 @@
 package backend.order_spring_designpatterns.DTO.Request;
 
 import backend.order_spring_designpatterns.Service.Enums.RolesEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /* Record responsável por definir o transporte de dados de novo registro de usuário, delimitando informações específicas */
-public record UserAuthRegisterRequestDTO(
+public record UserAuthRegisterRequest(
         @NotBlank(message = "Username inválido!")
         String username,
 

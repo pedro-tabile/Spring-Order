@@ -1,11 +1,12 @@
 package backend.order_spring_designpatterns.Controller;
 
-import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
-import backend.order_spring_designpatterns.DTO.Response.ProductResponseDTO;
+import backend.order_spring_designpatterns.DTO.Request.ProductRequest;
+import backend.order_spring_designpatterns.DTO.Response.ProductResponse;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,42 +27,50 @@ public class ProductRestController {
     private ProductService productService;
 
     // Annotations Mapping permitem tratar métodos HTTP como PUT, DELETE, CREATE e UPDATE.
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> findAll(){
+    @GetMapping("/listAll")
+    public ResponseEntity<List<ProductResponse>> findAll(){
         // A classe ResponseEntity representa a resposta HTTP inteira (status e corpo) enviada ao cliente após requisição
         List<Product> products = productService.findAll();
-        List<ProductResponseDTO> productsResponse = products.stream().map(ProductResponseDTO::new).toList();
+        List<ProductResponse> productsResponse = products.stream().map(ProductResponse::new).toList();
 
         return ResponseEntity.ok(productsResponse);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id){
+    @GetMapping("/id/{id}")
+    public ResponseEntity<ProductResponse> findById(@PathVariable Long id){
         Product product = productService.findById(id);
-        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+        ProductResponse productResponse = new ProductResponse(product);
+
+        return ResponseEntity.ok(productResponse);
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<ProductResponse> findByName(@PathVariable String name){
+        Product product = productService.findByName(name);
+        ProductResponse productResponse = new ProductResponse(product);
 
         return ResponseEntity.ok(productResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@RequestBody @Valid ProductRequestDTO productRequestDTO,
-                                                     @PathVariable Long id){
+    public ResponseEntity<ProductResponse> update(@RequestBody @Valid ProductRequest productRequestDTO,
+                                                  @PathVariable Long id){
         Product product = productService.update(productRequestDTO, id);
-        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+        ProductResponse productResponse = new ProductResponse(product);
 
         return ResponseEntity.ok(productResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> delete(@PathVariable Long id){
+    public ResponseEntity delete(@PathVariable Long id){
         productService.delete(id);
-        return ResponseEntity.ok().build(); // Retorna resposta sem corpo
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna resposta sem corpo
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> insert(@RequestBody @Valid ProductRequestDTO productRequestDTO){
+    public ResponseEntity<ProductResponse> insert(@RequestBody @Valid ProductRequest productRequestDTO){
         Product product = productService.insert(productRequestDTO);
-        ProductResponseDTO productResponse = new ProductResponseDTO(product);
+        ProductResponse productResponse = new ProductResponse(product);
 
         return ResponseEntity.ok(productResponse);
     }

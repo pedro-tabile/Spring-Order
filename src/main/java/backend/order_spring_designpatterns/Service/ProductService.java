@@ -1,10 +1,12 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.Request.ProductRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.ProductRequest;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
+import backend.order_spring_designpatterns.Exception.ProductNotFoundByName;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import java.util.List;
 
 /* Classe que define regras de negócio para Product */
 @Service
-public class ProductService implements CrudService<Product, Long, ProductRequestDTO> {
+public class ProductService implements CrudService<Product, Long, ProductRequest> {
     @Autowired
     private ProductRepository productRepository;
 
@@ -26,7 +28,24 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
                 .orElseThrow(()->new IdNotFound("Produto", id));
     }
 
-    public Product insert(ProductRequestDTO productDTO){
+    @Tool(
+            name = "get-product-by-name",
+            description = """
+                    Busca as informações de um único produto pelo nome ou retorna um produto com valores null caso não 
+                    seja encontrado. Use somente para fazer uma única consulta para cada produto informado. 
+                    """
+    )
+    public Product findByNameTool(String name){
+        return productRepository.findByName(name)
+                .orElse(new Product(Long.getLong("0"), null, null, null));
+    }
+
+    public Product findByName(String name){
+        return productRepository.findByName(name)
+                .orElseThrow(()->new ProductNotFoundByName(name));
+    }
+
+    public Product insert(ProductRequest productDTO){
         Product product = new Product();
         product.setName(productDTO.name());
         product.setPrice(productDTO.price());
@@ -36,7 +55,7 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
         return product;
     }
 
-    public Product update(ProductRequestDTO productDTO, Long id){
+    public Product update(ProductRequest productDTO, Long id){
         Product productById = findById(id);
         productById.setName(productDTO.name());
         productById.setPrice(productDTO.price());

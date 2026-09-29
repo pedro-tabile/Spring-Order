@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/* Definição de interface que interage com banco de dados e implementa interface com métodos CRUD para o tipo/tabela
+especificado */
+/* A dependência (Spring Data JPA) cria a implementação dos métodos em tempo de execução */
 @Repository
 public interface UserAuthRepository extends JpaRepository<UserAuth, UUID> {
     Optional<UserAuth> findByUsername(String username);

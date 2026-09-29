@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 // Record responsável por definir cada item presente nas informações personalizadas dos emails enviados
-public record PersonalizationDataRequestDTO(
+public record PersonalizationDataRequest(
     String clientName,
     String orderId,
     String status,
@@ -19,8 +19,8 @@ public record PersonalizationDataRequestDTO(
     String paymentMethod
 ) {
 
-    public PersonalizationDataRequestDTO(String clientName, Long orderId, StatusOrderEnum status,
-                                         OffsetDateTime orderDate, BigDecimal totalValue, PaymentMethodsEnum paymentMethod) {
+    public PersonalizationDataRequest(String clientName, Long orderId, StatusOrderEnum status,
+                                      OffsetDateTime orderDate, BigDecimal totalValue, PaymentMethodsEnum paymentMethod) {
         this(
                 clientName,
                 orderId.toString(),

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-
 // Habilita configurações de segurança personalizadas
 @EnableWebSecurity
 // Classe com configurações de segurança (Spring Security) relacionadas à autenticação e acesso aos endpoints
@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
                 // Desabilita a proteção do csrf (token)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -33,15 +33,51 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/auth/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("STOCKER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("STOCKER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("STOCKER", "MANAGER")
+
+                        .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+
+                        .requestMatchers(HttpMethod.GET, "/ai/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/ai/**").hasAnyRole("CASHIER", "MANAGER")
+
+                        /* No caso do endpoint clients, considera-se que um customer somente pode adicionar, alterar e
+                        excluir suas próprias informações no mundo real. */
+                        .requestMatchers(HttpMethod.POST, "/clients/**").hasAnyRole("CASHIER", "CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/clients/**").hasAnyRole("CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasAnyRole("CUSTOMER", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("CASHIER", "MANAGER")
+
                         .anyRequest().authenticated()
                 )
                 // Filtro executado antes do processamento de uma autenticação enviada
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // Captura de exceção lançada quando o acesso é negado ou quando a autenticação falha
+                .exceptionHandling(exceptionAuth -> {
+                    exceptionAuth
+                            .accessDeniedHandler((req, res, accessDeniedException) -> {
+                                res.setStatus(HttpStatus.FORBIDDEN.value());
+                                res.setHeader("Content-Type", "text/plain");
+                                res.setCharacterEncoding("UTF-8");
+                                res.getWriter().write("Acesso negado! Você não tem permissão para acessar essa operação!");
+                            })
+                            .authenticationEntryPoint((req, res, authException) -> {
+                                res.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                res.setHeader("Content-Type", "text/plain");
+                                res.setCharacterEncoding("UTF-8");
+                                res.getWriter().write("Token inválido! Realize a autenticação!");
+                            });
+                })
+
                 // Gerenciamento de sessão como stateless
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 

@@ -1,6 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
-import backend.order_spring_designpatterns.DTO.Request.OrderItemRequestDTO;
+import backend.order_spring_designpatterns.DTO.Request.OrderItemRequest;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Product;
@@ -19,7 +19,7 @@ public class OrderItemService {
     @Autowired
     private ProductService productService;
 
-    public OrderItem insert(OrderItemRequestDTO orderItemRequest, Order order) {
+    public OrderItem insert(OrderItemRequest orderItemRequest, Order order) {
         Product product = productService.findById(orderItemRequest.productId());
         Integer productAmount = orderItemRequest.amount();
         BigDecimal totalPrice = product.getPrice().multiply(BigDecimal.valueOf(productAmount.longValue()));
@@ -47,7 +47,7 @@ public class OrderItemService {
         return orderItemRepository.findByProductAndOrderId(productId, orderId);
     }
 
-    public void updateFromDTOData(OrderItemRequestDTO orderItemRequest, OrderItem orderItemSaved){
+    public void updateFromDTOData(OrderItemRequest orderItemRequest, OrderItem orderItemSaved){
         Product product = productService.findById(orderItemRequest.productId());
 
         if (orderItemRequest.amount().longValue() > product.getStock().longValue())
