@@ -1,9 +1,7 @@
 package backend.order_spring_designpatterns.Controller;
 
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
-import backend.order_spring_designpatterns.DTO.Response.ModelOrderResponseAi;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
-import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Exception.InvalidAudioFile;
 import backend.order_spring_designpatterns.Service.ChatClientService;
 import backend.order_spring_designpatterns.Service.SpeechToTextService;
@@ -63,7 +61,7 @@ public class AiRestController {
 
     @PostMapping(value = "/save-order")
     public ResponseEntity<OrderResponse> saveOrder(@RequestParam String text){
-        OrderResponse orderSavedJsonResponse = genAiService.saveOrderInBd(text);
+        OrderResponse orderSavedJsonResponse = genAiService.saveOrder(text);
         return ResponseEntity.ok().body(orderSavedJsonResponse);
     }
 }

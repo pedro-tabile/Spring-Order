@@ -1,14 +1,11 @@
 package backend.order_spring_designpatterns.Service;
 
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
-import backend.order_spring_designpatterns.DTO.Response.ModelOrderResponseAi;
-import backend.order_spring_designpatterns.DTO.Response.OrderItemResponse;
 import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
 import backend.order_spring_designpatterns.DTO.Response.ModelOrderRequestResponseAi;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Exception.AiInvalidDataEntered;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +17,7 @@ public class ChatClientService {
     @Autowired
     private OrderService orderService;
 
+    /*Outra maneira de implementar saveOrder() com tool para inserção direta e conversão de dados
     @Tool(
             name = "insert-order",
             description = "Salva um order no banco de dados a partir das informações recebidas no json e retorna um " +
@@ -29,7 +27,7 @@ public class ChatClientService {
         Order orderSaved = orderService.insert(orderRequest);
         ModelOrderResponseAi orderResponse = new ModelOrderResponseAi(orderSaved);
         return orderResponse;
-    }
+    }*/
 
     public OrderRequest generateResponse(String prompt){
         /* As Propriedades também podem ser configuradas aqui:
@@ -52,7 +50,8 @@ public class ChatClientService {
         );
     }
 
-    public OrderResponse saveOrderInBd(String prompt){
+    public OrderResponse saveOrder(String prompt){
+        /* Outra abordagem seria delegando totalmente o processo de geração de json e inserção à IA:
         ModelOrderResponseAi orderSavedJson = this.chatClient
                 .prompt()
                 .user(prompt)
@@ -71,7 +70,10 @@ public class ChatClientService {
                 orderSavedJson.status(),
                 orderSavedJson.creationDate(),
                 orderSavedJson.orderItems()
-        );
+        );*/
+        OrderRequest orderRequest = this.generateResponse(prompt);
+        Order orderSaved = orderService.insert(orderRequest);
+        OrderResponse jsonResponse = new OrderResponse(orderSaved);
 
         return jsonResponse;
     }
