@@ -1,6 +1,9 @@
 package backend.order_spring_designpatterns.Controller;
 
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
+import backend.order_spring_designpatterns.DTO.Response.ModelOrderResponseAi;
+import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
+import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Exception.InvalidAudioFile;
 import backend.order_spring_designpatterns.Service.ChatClientService;
 import backend.order_spring_designpatterns.Service.SpeechToTextService;
@@ -57,6 +60,10 @@ public class AiRestController {
 
         return ResponseEntity.ok().body(response);
     }
-}
 
-// Criação de endpoint exclusivo para operações com IA; Criação de serviço para geração de orderJson a partir de audio com IA;
+    @PostMapping(value = "/save-order")
+    public ResponseEntity<OrderResponse> saveOrder(@RequestParam String text){
+        OrderResponse orderSavedJsonResponse = genAiService.saveOrderInBd(text);
+        return ResponseEntity.ok().body(orderSavedJsonResponse);
+    }
+}

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 // Classe de configuração que define um bean de ChatClient ao Spring para injeção e gerenciamento
 public class ChatClientConfig {
-    private final String contexto = """
+    private static final String contexto = """
             Você é uma espécie de tradutor/conversor inteligente para um sistema de pedidos de supermercado. Sua missão é
             receber informações que contém a seguinte estrutura: código do cliente; lista de itens, com cada item informado
             junto à quantidade adquirida; e método de pagamento. Com base nessas informações você deve usar a ferramenta 
@@ -47,6 +47,11 @@ public class ChatClientConfig {
             - Caso o método de pagamento informado não seja uma das opções DINHEIRO, DEBITO, CREDITO ou PIX, retorne os 
             campos como null e o seguinte no message, substituindo as chaves pelo método informado: {"message":" Método 
             de pagamento inválido: <método informado>"}.
+            
+            Por fim, caso a tool insert-order seja fornecida e nenhum erro tenha sido detectado, utilize-a para salvar o 
+            json montado no banco de dados, retornando ao cliente um json do tipo ModelOrderResponseAI conforme as 
+            informações registradas no banco e retornadas pelo método fornecido pela tool. Caso ocorra algum erro
+            durante a execução dessa tool, retorne o erro específico no message.
             """;
 
     @Bean
